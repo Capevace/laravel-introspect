@@ -3,6 +3,9 @@
 A utility library to analyze and pull information from Laravel codebases, querying model, route and more Laravel-specific things directly from your codebase using PHP reflection.
 It is targeted for development tools and coding agents for better understanding of the codebase.
 
+> [!WARNING]  
+> I'm still finalizing the API and using this documentation for API design.
+> Not all methods listed here have been implemented yet and some of them may change until 1.0 release.
 
 ## Who is this for?
 
@@ -35,7 +38,7 @@ $views = Introspect::views()->get();
 ### Query all models that use a trait
 ```php
 $models = Introspect::models()
-    ->whereTrait(MyTrait::class)
+    ->whereUses(MyTrait::class)
     ->get();
 ```
 

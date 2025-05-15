@@ -159,7 +159,7 @@ trait WhereRoutes
         $this->wheres->push(new WhereRouteUsesController($controller, method: $method));
 
         return $this;
-    }
+    }r
 
     public function whereDoesntUseController(string $controller, ?string $method = null): static
     {
