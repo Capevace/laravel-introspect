@@ -1,92 +1,129 @@
-# :package_description
+# Introspect for Laravel
 
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/:vendor_slug/:package_slug.svg?style=flat-square)](https://packagist.org/packages/:vendor_slug/:package_slug)
-[![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/:vendor_slug/:package_slug/run-tests.yml?branch=main&label=tests&style=flat-square)](https://github.com/:vendor_slug/:package_slug/actions?query=workflow%3Arun-tests+branch%3Amain)
-[![GitHub Code Style Action Status](https://img.shields.io/github/actions/workflow/status/:vendor_slug/:package_slug/fix-php-code-style-issues.yml?branch=main&label=code%20style&style=flat-square)](https://github.com/:vendor_slug/:package_slug/actions?query=workflow%3A"Fix+PHP+code+style+issues"+branch%3Amain)
-[![Total Downloads](https://img.shields.io/packagist/dt/:vendor_slug/:package_slug.svg?style=flat-square)](https://packagist.org/packages/:vendor_slug/:package_slug)
-<!--delete-->
----
-This repo can be used to scaffold a Laravel package. Follow these steps to get started:
+A utility library to analyze and pull information from Laravel codebases, querying model, route and more Laravel-specific things directly from your codebase using PHP reflection.
+It is targeted for development tools and coding agents for better understanding of the codebase.
 
-1. Press the "Use this template" button at the top of this repo to create a new repo with the contents of this skeleton.
-2. Run "php ./configure.php" to run a script that will replace all placeholders throughout all the files.
-3. Have fun creating your package.
-4. If you need help creating a package, consider picking up our <a href="https://laravelpackage.training">Laravel Package Training</a> video course.
----
-<!--/delete-->
-This is where your description should go. Limit it to a paragraph or two. Consider adding a small example.
 
-## Support us
+## Who is this for?
 
-[<img src="https://github-ads.s3.eu-central-1.amazonaws.com/:package_name.jpg?t=1" width="419px" />](https://spatie.be/github-ad-click/:package_name)
-
-We invest a lot of resources into creating [best in class open source packages](https://spatie.be/open-source). You can support us by [buying one of our paid products](https://spatie.be/open-source/support-us).
-
-We highly appreciate you sending us a postcard from your hometown, mentioning which of our package(s) you are using. You'll find our address on [our contact page](https://spatie.be/about-us). We publish all received postcards on [our virtual postcard wall](https://spatie.be/open-source/postcards).
+Are you building a devtool or other application that needs to introspect a Laravel codebase?
+Then this package will make your life a lot easier by providing a fluent API to query models, routes, controllers, views and more.
 
 ## Installation
 
-You can install the package via composer:
+Install the package via composer:
 
 ```bash
-composer require :vendor_slug/:package_slug
-```
-
-You can publish and run the migrations with:
-
-```bash
-php artisan vendor:publish --tag=":package_slug-migrations"
-php artisan migrate
-```
-
-You can publish the config file with:
-
-```bash
-php artisan vendor:publish --tag=":package_slug-config"
-```
-
-This is the contents of the published config file:
-
-```php
-return [
-];
-```
-
-Optionally, you can publish the views using
-
-```bash
-php artisan vendor:publish --tag=":package_slug-views"
+composer require mateffy/laravel-introspect
 ```
 
 ## Usage
 
 ```php
-$variable = new VendorName\Skeleton();
-echo $variable->echoPhrase('Hello, VendorName!');
+use Mateffy\Introspect\Facades\Introspect;
+
+$models = Introspect::models()->get();
+$routes = Introspect::routes()->get();
+$controllers = Introspect::controllers()->get();
+$configurations = Introspect::config()->get();
+$views = Introspect::views()->get();
+// and more!
 ```
 
-## Testing
+## Examples
 
-```bash
-composer test
+### Query all models that use a trait
+```php
+$models = Introspect::models()
+    ->whereTrait(MyTrait::class)
+    ->get();
 ```
 
-## Changelog
+### Query all routes that use a controller
+```php
+$routes = Introspect::routes()
+    ->whereController(MyController::class)
+    ->whereMethod('index')
+    ->get();
+```
 
-Please see [CHANGELOG](CHANGELOG.md) for more information on what has changed recently.
+### Query all routes that use a specific middleware
+```php
+$routes = Introspect::routes()
+    ->whereMiddleware(MyMiddleware::class)
+    ->whereMiddleware('web')
+    ->get();
+```
 
-## Contributing
+### Views
 
-Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
+#### Query all views that are used in specific views
+```php
+$routes = Introspect::views()
+    ->whereUsedIn('pages.welcome')
+    ->get();
+```
 
-## Security Vulnerabilities
+#### Query all views that use a specific view
+```php
+$routes = Introspect::views()
+    ->whereUses('components.button')
+    ->get();
+```
 
-Please review [our security policy](../../security/policy) on how to report security vulnerabilities.
+#### Query views by view path
+```php
+$views = Introspect::views()
+    ->whereNameStartsWith('pages.')
+    ->get();
 
-## Credits
+$views = Introspect::views()
+    ->whereNameEndsWith('button')
+    ->get();
 
-- [:author_name](https://github.com/:author_username)
-- [All Contributors](../../contributors)
+$views = Introspect::views()
+    ->whereNameContains('button')
+    ->get();
+```
+
+### Search through your codebase using vector embeddings
+
+Introspect has support for indexing and querying your codebase using vector embeddings. 
+It does so using the [LLM Magic](https://github.com/capevace/llm-magic) package, which allows you to use most popular LLMs using your own API keys.
+
+### Limit the results and paginate just like using Eloquent queries
+```php
+$models = Introspect::models()
+    ->limit(10)
+    ->offset(20)
+    ->get();
+```
+
+### Build Queries with JSON instead of code
+
+All the type-safe queries above can also be expressed in JSON format.
+This is to make it easier for LLMs to be able to more flexibly query the codebase.
+
+```php
+$query = <<<JSON
+{
+    "type": "models",
+    "query": {
+        "filters": [
+            {
+                "type": "whereTrait",
+                "value": "MyTrait::class"
+            }
+        ],
+        "limit": 10,
+        "offset": 20
+    }
+}
+JSON;
+
+$models = Introspect::query($query)->get();
+```
+
 
 ## License
 
