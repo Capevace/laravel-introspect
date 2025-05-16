@@ -2,7 +2,9 @@
 
 namespace Mateffy\Introspect\Query\Contracts;
 
-interface ViewQueryInterface extends QueryInterface
+use Mateffy\Introspect\Query\Query;
+
+interface ViewQueryInterface extends Query
 {
     /**
      * @param string|string[] $view`

@@ -3,19 +3,18 @@
 namespace Mateffy\Introspect\Query\Where\Routes;
 
 use Illuminate\Routing\Route;
-use Mateffy\Introspect\Query\Where\Concerns\NotInverter;
+use Mateffy\Introspect\Query\Where\Generic\WhereTextStartsWith;
 use Mateffy\Introspect\Query\Where\RouteWhere;
 
 class WhereRouteNameStartsWith implements RouteWhere
 {
-    use NotInverter;
+    use WhereTextStartsWith;
 
-    public function __construct(public string $text, public bool $not = false)
+    /**
+     * @param Route $value
+     */
+    protected function getName($value): string
     {
-    }
-
-    public function filter(Route $value): bool
-    {
-        return $this->invert(str_starts_with($value->getName(), $this->text), $this->not);
+        return $value->getName();
     }
 }

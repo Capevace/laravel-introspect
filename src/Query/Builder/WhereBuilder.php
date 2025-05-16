@@ -4,7 +4,7 @@ namespace Mateffy\Introspect\Query\Builder;
 
 use Closure;
 use Illuminate\Support\Collection;
-use Mateffy\Introspect\Query\Contracts\QueryInterface;
+use Mateffy\Introspect\Query\Query;
 use Mateffy\Introspect\Query\Where;
 use Mateffy\Introspect\Query\Where\NestedWhere;
 
@@ -18,7 +18,7 @@ trait WhereBuilder
 	protected Collection $wheres;
 
     /**
-	 * @param Closure(QueryInterface): QueryInterface $query
+	 * @param Closure(Query): Query $query
      */
 	public function where(Closure $query, bool $or = false): static
 	{

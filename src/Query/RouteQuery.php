@@ -37,7 +37,6 @@ class RouteQuery implements RouteQueryInterface, PaginationInterface, QueryPerfo
         $router = app('router');
 
         return collect($router->getRoutes())
-            ->dd()
             ->filter(fn (Route $route) => $this->filterUsingQuery($route))
             ->values()
             ->map(fn (Route $route) => $this->transformResult($route));

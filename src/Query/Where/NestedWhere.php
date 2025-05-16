@@ -4,12 +4,12 @@ namespace Mateffy\Introspect\Query\Where;
 
 use Illuminate\Support\Collection;
 use Mateffy\Introspect\Query\Builder\WhereBuilder;
-use Mateffy\Introspect\Query\Contracts\QueryInterface;
+use Mateffy\Introspect\Query\Query;
 use Mateffy\Introspect\Query\Where;
 use Mateffy\Introspect\Query\Where\Concerns\NotInverter;
 use Roave\BetterReflection\Reflection\ReflectionClass;
 
-class NestedWhere implements Where, QueryInterface
+class NestedWhere implements Where, Query
 {
     use NotInverter;
 	use WhereBuilder;

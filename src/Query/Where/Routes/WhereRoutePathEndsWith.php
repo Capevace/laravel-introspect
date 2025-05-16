@@ -3,19 +3,18 @@
 namespace Mateffy\Introspect\Query\Where\Routes;
 
 use Illuminate\Routing\Route;
-use Mateffy\Introspect\Query\Where\Concerns\NotInverter;
+use Mateffy\Introspect\Query\Where\Generic\WhereTextEndsWith;
 use Mateffy\Introspect\Query\Where\RouteWhere;
 
 class WhereRoutePathEndsWith implements RouteWhere
 {
-    use NotInverter;
+    use WhereTextEndsWith;
 
-    public function __construct(public string $text, public bool $not = false)
+    /**
+     * @param Route $value
+     */
+    protected function getName($value): string
     {
-    }
-
-    public function filter(Route $value): bool
-    {
-        return $this->invert(str_ends_with($value->uri(), $this->text), $this->not);
+        return $value->uri();
     }
 }

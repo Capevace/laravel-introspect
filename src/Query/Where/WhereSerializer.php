@@ -17,7 +17,7 @@ class WhereSerializer
         $class = match ($data['type']) {
             default => throw new InvalidArgumentException('Unknown where type: ' . $data['type']),
             'nested' => NestedWhere::class,
-            'nested:class' => Classes\NestedClassWhere::class,
+            'nested:class' => Classes\NestedClassWhereInterface::class,
 //            'nested:view' => Views\NestedViewWhere::class,
 //            'nested:route' => Routes\NestedRouteWhere::class,
 //            'nested:controller' => Controllers\NestedControllerWhere::class,q
@@ -31,7 +31,7 @@ class WhereSerializer
 
             // Route wheres
             'route-name-starts-with' => Routes\WhereRouteNameStartsWith::class,
-            'route-name-ends-with' => Routes\WhereRouteNameEndsWith::class,
+            'route-name-ends-with' => Routes\WhereNameEndsWith::class,
             'route-name-contains' => Routes\WhereRouteNameContains::class,
             'route-path-starts-with' => Routes\WhereRoutePathStartsWith::class,
             'route-path-ends-with' => Routes\WhereRoutePathEndsWith::class,
@@ -42,8 +42,8 @@ class WhereSerializer
 
             // Class wheres
             'class-extends' => Classes\WhereExtendsClass::class,
-            'class-implements' => Classes\WhereImplementsInterface::class,
-            'class-uses-trait' => Classes\WhereUsesTrait::class,
+            'class-implements' => Classes\WhereImplementsInterfaces::class,
+            'class-uses-trait' => Classes\WhereUsesTraits::class,
         };
 
         return $class::fromArray($data);

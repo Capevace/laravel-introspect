@@ -18,6 +18,7 @@ use Roave\BetterReflection\Reflector\DefaultReflector;
 use Roave\BetterReflection\SourceLocator\SourceStubber\ReflectionSourceStubber;
 use Roave\BetterReflection\SourceLocator\Type\AggregateSourceLocator;
 use Roave\BetterReflection\SourceLocator\Type\Composer\Factory\MakeLocatorForComposerJsonAndInstalledJson;
+use Roave\BetterReflection\SourceLocator\Type\DirectoriesSourceLocator;
 use Roave\BetterReflection\SourceLocator\Type\PhpInternalSourceLocator;
 use Spatie\StructureDiscoverer\Discover;
 
@@ -56,12 +57,6 @@ class ClassQuery implements ClassQueryInterface, PaginationInterface, QueryPerfo
      */
     public function get(): Collection
     {
-        $astLocator = (new BetterReflection())->astLocator();
-        $reflector  = new DefaultReflector(new AggregateSourceLocator([
-            (new MakeLocatorForComposerJsonAndInstalledJson)($this->path, $astLocator),
-            new PhpInternalSourceLocator($astLocator, new ReflectionSourceStubber())
-        ]));
-
         if (count($this->directories) === 0) {
             $paths = collect([$this->path]);
         } else {
@@ -69,6 +64,13 @@ class ClassQuery implements ClassQueryInterface, PaginationInterface, QueryPerfo
                 ->map(fn (string $directory) => "{$this->path}/{$directory}")
                 ->all();
         }
+
+        $astLocator = (new BetterReflection())->astLocator();
+        $reflector  = new DefaultReflector(new AggregateSourceLocator([
+            new DirectoriesSourceLocator($paths, $astLocator),
+            (new MakeLocatorForComposerJsonAndInstalledJson)($this->path, $astLocator),
+            new PhpInternalSourceLocator($astLocator, new ReflectionSourceStubber())
+        ]));
 
         $discover = Discover::in(...$paths);
 

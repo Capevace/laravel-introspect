@@ -5,7 +5,6 @@ namespace Mateffy\Introspect;
 use Illuminate\Container\Container;
 use Mateffy\Introspect\Query\Contracts\ClassQueryInterface;
 use Mateffy\Introspect\Query\Contracts\ModelQueryInterface;
-use Mateffy\Introspect\Query\Contracts\QueryInterface;
 use Mateffy\Introspect\Query\Contracts\RouteQueryInterface;
 use Mateffy\Introspect\Query\Contracts\ViewQueryInterface;
 use Mateffy\Introspect\Reflection\ModelReflector;

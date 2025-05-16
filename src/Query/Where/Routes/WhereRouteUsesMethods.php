@@ -23,7 +23,7 @@ class WhereRouteUsesMethods implements RouteWhere
 
     public function filter(Route $value): bool
     {
-        $methods = collect($this->methods)
+        $methods = collect($value->methods())
             ->map(fn(string $method) => strtoupper($method))
             ->unique()
             ->values();

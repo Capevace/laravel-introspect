@@ -2,98 +2,185 @@
 
 namespace Mateffy\Introspect\Query\Builder;
 
+use Illuminate\Support\Collection;
+use Mateffy\Introspect\Query\Where\Routes\WhereRouteNameEndsWith;
+use Mateffy\Introspect\Query\Where\Routes\WhereRoutePathEquals;
 use Mateffy\Introspect\Query\Where\Routes\WhereRouteUsesController;
 use Mateffy\Introspect\Query\Where\Routes\WhereRouteHasParameters;
 use Mateffy\Introspect\Query\Where\Routes\WhereRouteNameContains;
-use Mateffy\Introspect\Query\Where\Routes\WhereRouteNameEndsWith;
 use Mateffy\Introspect\Query\Where\Routes\WhereRouteNameStartsWith;
 use Mateffy\Introspect\Query\Where\Routes\WhereRoutePathContains;
 use Mateffy\Introspect\Query\Where\Routes\WhereRoutePathEndsWith;
 use Mateffy\Introspect\Query\Where\Routes\WhereRoutePathStartsWith;
+use Mateffy\Introspect\Query\Where\Routes\WhereRouteUsesMethods;
 use Mateffy\Introspect\Query\Where\Routes\WhereRouteUsesMiddlewares;
 
 trait WhereRoutes
 {
-    public function whereNameStartsWith(string $text): static
+    public function whereNameStartsWith(string|array $text, bool $all = true): static
     {
-        $this->wheres->push(new WhereRouteNameStartsWith($text));
+        $this->wheres->push(new WhereRouteNameStartsWith(
+            is_array($text) ? $text : [$text],
+            all: $all
+        ));
 
         return $this;
     }
 
-    public function whereNameDoesntStartWith(string $text): static
+    public function whereNameDoesntStartWith(string|array $text, bool $all = true): static
     {
-        $this->wheres->push(new WhereRouteNameStartsWith($text, not: true));
+        $this->wheres->push(new WhereRouteNameStartsWith(
+            is_array($text) ? $text : [$text],
+            not: true,
+            all: $all
+        ));
 
         return $this;
     }
 
-    public function whereNameEndsWith(string $text): static
+    public function whereNameEndsWith(string|array $text, bool $all = true): static
     {
-        $this->wheres->push(new WhereRouteNameEndsWith($text));
+        $this->wheres->push(new WhereRouteNameEndsWith(
+            is_array($text) ? $text : [$text],
+            all: $all
+        ));
 
         return $this;
     }
 
-    public function whereNameDoesntEndWith(string $text): static
+    public function whereNameDoesntEndWith(string|array $text, bool $all = true): static
     {
-        $this->wheres->push(new WhereRouteNameEndsWith($text, not: true));
+        $this->wheres->push(new WhereRouteNameEndsWith(
+            is_array($text) ? $text : [$text],
+            not: true,
+            all: $all
+        ));
 
         return $this;
     }
 
-    public function whereNameContains(string $text): static
+    public function whereNameContains(string|array $text, bool $all = true): static
     {
-        $this->wheres->push(new WhereRouteNameContains($text));
+        $this->wheres->push(new WhereRouteNameContains(
+            is_array($text) ? $text : [$text],
+            all: $all
+        ));
 
         return $this;
     }
 
-    public function whereNameDoesntContain(string $text): static
+    public function whereNameDoesntContain(string|array $text, bool $all = true): static
     {
-        $this->wheres->push(new WhereRouteNameContains($text, not: true));
+        $this->wheres->push(new WhereRouteNameContains(
+            is_array($text) ? $text : [$text],
+            not: true,
+            all: $all
+        ));
 
         return $this;
     }
 
-    public function wherePathStartsWith(string $text): static
+    public function whereNameEquals(string|array $text, bool $all = true): static
     {
-        $this->wheres->push(new WhereRoutePathStartsWith($text));
+        $this->wheres->push(new WhereRouteNameEndsWith(
+            is_array($text) ? $text : [$text],
+            all: $all
+        ));
 
         return $this;
     }
 
-    public function wherePathDoesntStartWith(string $text): static
+    public function whereNameDoesntEqual(string|array $text, bool $all = true): static
     {
-        $this->wheres->push(new WhereRoutePathStartsWith($text, not: true));
+        $this->wheres->push(new WhereRouteNameEndsWith(
+            is_array($text) ? $text : [$text],
+            not: true,
+            all: $all
+        ));
 
         return $this;
     }
 
-    public function wherePathEndsWith(string $text): static
+    public function wherePathEquals(string|array $text, bool $all = true): static
     {
-        $this->wheres->push(new WhereRoutePathEndsWith($text));
+        $this->wheres->push(new WhereRoutePathEquals(
+            is_array($text) ? $text : [$text],
+            all: $all
+        ));
 
         return $this;
     }
 
-    public function wherePathDoesntEndWith(string $text): static
+    public function wherePathDoesntEqual(string|array $text, bool $all = true): static
     {
-        $this->wheres->push(new WhereRoutePathEndsWith($text, not: true));
+        $this->wheres->push(new WhereRoutePathEquals(
+            is_array($text) ? $text : [$text],
+            not: true,
+            all: $all
+        ));
 
         return $this;
     }
 
-    public function wherePathContains(string $text): static
+    public function wherePathEndsWith(string|array $text, bool $all = true): static
     {
-        $this->wheres->push(new WhereRoutePathContains($text));
+        $this->wheres->push(new WhereRoutePathEndsWith(
+            is_array($text) ? $text : [$text],
+            all: $all
+        ));
 
         return $this;
     }
 
-    public function wherePathDoesntContain(string $text): static
+    public function wherePathDoesntEndWith(string|array $text, bool $all = true): static
     {
-        $this->wheres->push(new WhereRoutePathContains($text, not: true));
+        $this->wheres->push(new WhereRoutePathEndsWith(
+            is_array($text) ? $text : [$text],
+            not: true,
+            all: $all
+        ));
+
+        return $this;
+    }
+
+    public function wherePathStartsWith(string|array $text, bool $all = true): static
+    {
+        $this->wheres->push(new WhereRoutePathStartsWith(
+            is_array($text) ? $text : [$text],
+            all: $all
+        ));
+
+        return $this;
+    }
+
+    public function wherePathDoesntStartWith(string|array $text, bool $all = true): static
+    {
+        $this->wheres->push(new WhereRoutePathStartsWith(
+            is_array($text) ? $text : [$text],
+            not: true,
+            all: $all
+        ));
+
+        return $this;
+    }
+
+    public function wherePathContains(string|array $text, bool $all = true): static
+    {
+        $this->wheres->push(new WhereRoutePathContains(
+            is_array($text) ? $text : [$text],
+            all: $all
+        ));
+
+        return $this;
+    }
+
+    public function wherePathDoesntContain(string|array $text, bool $all = true): static
+    {
+        $this->wheres->push(new WhereRoutePathContains(
+            is_array($text) ? $text : [$text],
+            not: true,
+            all: $all
+        ));
 
         return $this;
     }
@@ -164,6 +251,39 @@ trait WhereRoutes
     public function whereDoesntUseController(string $controller, ?string $method = null): static
     {
         $this->wheres->push(new WhereRouteUsesController($controller, method: $method, not: true));
+
+        return $this;
+    }
+
+//    public function whereUsesMethod(string $method): static;
+//    public function whereDoesntUseMethod(string $method): static;
+//    public function whereUsesMethods(array $methods, bool $all = true): static;
+//    public function whereDoesntUseMethods(array $methods, bool $all = true): static;
+
+    public function whereUsesMethod(string $method): static
+    {
+        $this->wheres->push(new WhereRouteUsesMethods([$method]));
+
+        return $this;
+    }
+
+    public function whereDoesntUseMethod(string $method): static
+    {
+        $this->wheres->push(new WhereRouteUsesMethods([$method], not: true));
+
+        return $this;
+    }
+
+    public function whereUsesMethods(array $methods, bool $all = true): static
+    {
+        $this->wheres->push(new WhereRouteUsesMethods($methods, all: $all));
+
+        return $this;
+    }
+
+    public function whereDoesntUseMethods(array $methods, bool $all = true): static
+    {
+        $this->wheres->push(new WhereRouteUsesMethods($methods, not: true, all: $all));
 
         return $this;
     }

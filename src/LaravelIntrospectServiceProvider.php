@@ -27,8 +27,8 @@ class LaravelIntrospectServiceProvider extends PackageServiceProvider
     {
         parent::register();
 
+//        $this->app->bind(ModelQueryInterface::class, ModelQuery::class);
         $this->app->bind(ClassQueryInterface::class, ClassQuery::class);
-        $this->app->bind(ModelQueryInterface::class, ModelQuery::class);
         $this->app->bind(ViewQueryInterface::class, ViewQuery::class);
         $this->app->bind(RouteQueryInterface::class, RouteQuery::class);
     }

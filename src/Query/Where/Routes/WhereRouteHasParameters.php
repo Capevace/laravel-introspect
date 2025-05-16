@@ -26,10 +26,12 @@ class WhereRouteHasParameters implements RouteWhere
 
     public function filter(Route $value): bool
     {
+        $names = $value->parameterNames();
+
         if ($this->all) {
-            $passes = $this->parameters->every(fn (string $parameter) => $value->hasParameter($parameter));
+            $passes = $this->parameters->every(fn (string $parameter) => in_array($parameter, $names));
         } else {
-            $passes = $this->parameters->some(fn (string $parameter) => $value->hasParameter($parameter));
+            $passes = $this->parameters->some(fn (string $parameter) => in_array($parameter, $names));
         }
 
         return $this->invert($passes, $this->not);

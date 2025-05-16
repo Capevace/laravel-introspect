@@ -3,8 +3,8 @@
 namespace Mateffy\Introspect\Query\Builder;
 
 use Mateffy\Introspect\Query\Where\Classes\WhereExtendsClass;
-use Mateffy\Introspect\Query\Where\Classes\WhereImplementsInterface;
-use Mateffy\Introspect\Query\Where\Classes\WhereUsesTrait;
+use Mateffy\Introspect\Query\Where\Classes\WhereImplementsInterfaces;
+use Mateffy\Introspect\Query\Where\Classes\WhereUsesTraits;
 
 trait WhereClasses
 {
@@ -24,28 +24,34 @@ trait WhereClasses
 
 	public function whereImplements(string|array $interface): self
 	{
-		$this->wheres->push(new WhereImplementsInterface($interface));
+		$this->wheres->push(new WhereImplementsInterfaces(is_array($interface) ? $interface : [$interface]));
 
 		return $this;
 	}
 
     public function whereDoesntImplement(string|array $interface): self
     {
-        $this->wheres->push(new WhereImplementsInterface($interface, not: true));
+        $this->wheres->push(new WhereImplementsInterfaces(
+            is_array($interface) ? $interface : [$interface],
+            not: true
+        ));
 
         return $this;
     }
 
 	public function whereUses(string|array $trait): self
 	{
-		$this->wheres->push(new WhereUsesTrait($trait));
+		$this->wheres->push(new WhereUsesTraits(is_array($trait) ? $trait : [$trait]));
 
 		return $this;
 	}
 
     public function whereDoesntUse(string|array $trait): self
     {
-        $this->wheres->push(new WhereUsesTrait($trait, not: true));
+        $this->wheres->push(new WhereUsesTraits(
+            is_array($trait) ? $trait : [$trait],
+            not: true
+        ));
 
         return $this;
     }

@@ -2,7 +2,9 @@
 
 namespace Mateffy\Introspect\Query\Contracts;
 
-interface ClassQueryInterface extends QueryInterface
+use Mateffy\Introspect\Query\Query;
+
+interface ClassQueryInterface extends Query
 {
     /**
      * @param class-string $classpath
