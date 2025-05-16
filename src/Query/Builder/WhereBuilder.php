@@ -22,8 +22,13 @@ trait WhereBuilder
      */
 	public function where(Closure $query, bool $or = false): static
 	{
-		$where = new NestedWhere(or: $or);
-		$query($where);
+        $subquery = $this->createSubquery();
+
+        if ($returned = $query($subquery)) {
+            $subquery = $returned;
+        }
+
+		$where = new NestedWhere(wheres: $subquery->wheres, or: $or);
 
 		$this->wheres->push($where);
 

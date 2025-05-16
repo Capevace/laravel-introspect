@@ -35,6 +35,11 @@ class ClassQuery implements ClassQueryInterface, PaginationInterface, QueryPerfo
         $this->wheres = collect();
     }
 
+    public function createSubquery(): self
+    {
+        return new ClassQuery(path: $this->path, directories: $this->directories);
+    }
+
     protected function transformResult(ReflectionClass $class): mixed
     {
         return $class->getName();

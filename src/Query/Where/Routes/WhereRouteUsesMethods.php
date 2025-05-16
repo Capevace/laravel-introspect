@@ -4,7 +4,7 @@ namespace Mateffy\Introspect\Query\Where\Routes;
 
 use Illuminate\Routing\Route;
 use Illuminate\Support\Collection;
-use Mateffy\Introspect\Query\Where\NotInverter;
+use Mateffy\Introspect\Query\Where\Concerns\NotInverter;
 use Mateffy\Introspect\Query\Where\RouteWhere;
 
 class WhereRouteUsesMethods implements RouteWhere

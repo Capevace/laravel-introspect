@@ -2,7 +2,7 @@
 
 namespace Mateffy\Introspect\Query\Where\Views;
 
-use Mateffy\Introspect\Query\Where\NotInverter;
+use Mateffy\Introspect\Query\Where\Concerns\NotInverter;
 use Mateffy\Introspect\Query\Where\ViewWhere;
 
 class WhereViewNameStartsWith implements ViewWhere

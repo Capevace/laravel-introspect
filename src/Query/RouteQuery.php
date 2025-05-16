@@ -26,12 +26,18 @@ class RouteQuery implements RouteQueryInterface, PaginationInterface, QueryPerfo
         $this->wheres = collect();
     }
 
+    public function createSubquery(): self
+    {
+        return new RouteQuery(path: $this->path);
+    }
+
     public function get(): Collection
     {
         /** @var Router $router */
         $router = app('router');
 
         return collect($router->getRoutes())
+            ->dd()
             ->filter(fn (Route $route) => $this->filterUsingQuery($route))
             ->values()
             ->map(fn (Route $route) => $this->transformResult($route));

@@ -1,6 +1,6 @@
 <?php
 
-namespace Mateffy\Introspect\Query\Where;
+namespace Mateffy\Introspect\Query\Where\Concerns;
 
 trait NotInverter
 {

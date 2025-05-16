@@ -28,6 +28,11 @@ class ViewQuery implements ViewQueryInterface, PaginationInterface, QueryPerform
         $this->wheres = collect();
     }
 
+    public function createSubquery(): self
+    {
+        return new ViewQuery(path: $this->path);
+    }
+
     public function get(): Collection
     {
         /** @var Factory $viewFinder */

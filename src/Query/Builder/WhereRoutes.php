@@ -10,7 +10,7 @@ use Mateffy\Introspect\Query\Where\Routes\WhereRouteNameStartsWith;
 use Mateffy\Introspect\Query\Where\Routes\WhereRoutePathContains;
 use Mateffy\Introspect\Query\Where\Routes\WhereRoutePathEndsWith;
 use Mateffy\Introspect\Query\Where\Routes\WhereRoutePathStartsWith;
-use Mateffy\Introspect\Query\Where\Routes\WhereRouteUsesMiddleware;
+use Mateffy\Introspect\Query\Where\Routes\WhereRouteUsesMiddlewares;
 
 trait WhereRoutes
 {
@@ -100,42 +100,42 @@ trait WhereRoutes
 
     public function whereUsesMiddleware(string $middleware): static
     {
-        $this->wheres->push(new WhereRouteUsesMiddleware([$middleware]));
+        $this->wheres->push(new WhereRouteUsesMiddlewares([$middleware]));
 
         return $this;
     }
 
     public function whereUsesMiddlewares(array $middleware, bool $all = true): static
     {
-        $this->wheres->push(new WhereRouteUsesMiddleware($middleware, all: $all));
+        $this->wheres->push(new WhereRouteUsesMiddlewares($middleware, all: $all));
 
         return $this;
     }
 
     public function whereDoesntUseMiddleware(string $middleware): static
     {
-        $this->wheres->push(new WhereRouteUsesMiddleware([$middleware], not: true));
+        $this->wheres->push(new WhereRouteUsesMiddlewares([$middleware], not: true));
 
         return $this;
     }
 
     public function whereDoesntUseMiddlewares(array $middleware, bool $all = true): static
     {
-        $this->wheres->push(new WhereRouteUsesMiddleware($middleware, not: true, all: $all));
+        $this->wheres->push(new WhereRouteUsesMiddlewares($middleware, not: true, all: $all));
 
         return $this;
     }
 
     public function whereHasParameter(string $parameter): static
     {
-        $this->wheres->push(new WhereRouteHasParameters($parameter));
+        $this->wheres->push(new WhereRouteHasParameters([$parameter]));
 
         return $this;
     }
 
     public function whereDoesntHaveParameter(string $parameter): static
     {
-        $this->wheres->push(new WhereRouteHasParameters($parameter, not: true));
+        $this->wheres->push(new WhereRouteHasParameters([$parameter], not: true));
 
         return $this;
     }
@@ -159,7 +159,7 @@ trait WhereRoutes
         $this->wheres->push(new WhereRouteUsesController($controller, method: $method));
 
         return $this;
-    }r
+    }
 
     public function whereDoesntUseController(string $controller, ?string $method = null): static
     {

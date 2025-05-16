@@ -11,6 +11,11 @@ use Roave\BetterReflection\Reflection\ReflectionClass;
 
 class ModelQuery extends ClassQuery implements ModelQueryInterface, PaginationInterface, QueryPerformerInterface
 {
+    public function createSubquery(): self
+    {
+        return new ModelQuery(path: $this->path, directories: $this->directories);
+    }
+
     public function filterUsingQuery(ReflectionClass $class): bool
     {
         if (!$class->isSubclassOf(Model::class)) {

@@ -9,4 +9,6 @@ use Roave\BetterReflection\Reflection\ReflectionClass;
  */
 interface Where
 {
+//    public static function fromArray(array $data): static;
+//    public function toArray(): array;
 }

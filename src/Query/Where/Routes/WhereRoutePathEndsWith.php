@@ -3,7 +3,7 @@
 namespace Mateffy\Introspect\Query\Where\Routes;
 
 use Illuminate\Routing\Route;
-use Mateffy\Introspect\Query\Where\NotInverter;
+use Mateffy\Introspect\Query\Where\Concerns\NotInverter;
 use Mateffy\Introspect\Query\Where\RouteWhere;
 
 class WhereRoutePathEndsWith implements RouteWhere

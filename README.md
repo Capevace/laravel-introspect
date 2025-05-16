@@ -5,7 +5,7 @@ It is targeted for development tools and coding agents for better understanding 
 
 > [!WARNING]  
 > I'm still finalizing the API and using this documentation for API design.
-> Not all methods listed here have been implemented yet and some of them may change until 1.0 release.
+> Not all methods listed here have been implemented yet and some of them may change until 1.0 release. 
 
 ## Who is this for?
 
