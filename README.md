@@ -24,7 +24,7 @@ Then this package will make your life a lot easier by providing a fluent API to 
 | ⤷ Models   | ... relationships, properties, casts, fillable, hidden, read/writeable |
 | ⤷ Commands | ... signature, description                                             |
   
-> Name and a few other queries support even support wildcards (e.g. `components.*.paragraph`)
+> Name and a few other queries even support wildcard queries (e.g. `components.*.paragraph`)
 
 <br />
 
@@ -59,9 +59,161 @@ $detail = Introspect::model(User::class);
 $schema = $detail->schema();
 ```  
 
+- [Views](#views)
+- [Routes](#routes)
+- [Classes](#generic-classes)
+- [Models](#models)
+- [Commands](#commands)
+- [Chaining queries with OR and AND](#chaining-orand)
+
 <br />
 
-## Query Examples  
+### Views  
+> All queries support wildcards, e.g. `components.*.button` or `*.button`
+
+#### Query all views that are used by specific views  
+```php  
+$routes = Introspect::views()  
+    ->whereUsedBy('pages.welcome')
+    ->get();
+    
+$routes = Introspect::views()  
+    ->whereUsedBy('pages.*')
+    ->get();
+    
+$routes = Introspect::views()  
+    ->whereNotUsedBy('pages.*')
+    ->get();
+```  
+  
+#### Query all views that use a specific view  
+```php  
+$routes = Introspect::views()  
+    ->whereUses('components.button')   
+    ->get();
+    
+$routes = Introspect::views()  
+    ->whereUses('*.button')   
+    ->get();
+    
+$routes = Introspect::views()  
+    ->whereDoesntUse('*.button')   
+    ->get();
+```  
+
+#### Query all views that extend a specific view  
+
+```php  
+$routes = Introspect::views()  
+    ->whereExtends('layouts.app')   
+    ->get();
+    
+$routes = Introspect::views()  
+    ->whereExtends('layouts.*')   
+    ->get();
+    
+$routes = Introspect::views()  
+    ->whereDoesntExtend('layouts.*')   
+    ->get();
+```
+
+### Routes
+#### Query all routes that use a controller  
+```php  
+$routes = Introspect::routes()  
+    ->whereUsesController(MyController::class)  
+    ->get();
+
+$routes = Introspect::routes()  
+    ->whereUsesController(MyController::class, 'index')
+    ->get();
+```  
+
+#### Query all routes that use a specific middleware  
+```php  
+$routes = Introspect::routes()  
+    ->whereUsesMiddleware(MyMiddleware::class)  
+    ->get();
+
+$routes = Introspect::routes()  
+    ->whereUsesMiddlewares(['tenant', 'auth'])  
+    ->get();
+    
+$routes = Introspect::routes()  
+    // Match any of the middlewares
+    ->whereUsesMiddlewares(['tenant', 'auth'], all: false)
+    ->get();
+    
+$routes = Introspect::routes()  
+    ->whereDoesntUseMiddleware('api')  
+    ->get();
+```  
+
+#### Query routes by name
+> "Name equals/contains" queries support wildcards, e.g. `api.products.*` or `*.products.*`  
+
+```php  
+$routes = Introspect::routes()  
+    ->whereNameEquals('api.products.*')
+    ->get();
+    
+$routes = Introspect::routes()  
+    ->whereNameStartsWith('api.products.')
+    ->get();
+
+$routes = Introspect::routes()  
+    ->whereNameEndsWith('api.products.')
+    ->get();
+    
+$routes = Introspect::routes()  
+    ->whereNameDoesntEqual('api.products.*')
+    ->get();
+```  
+
+#### Query routes by path
+> "Path equals/contains" queries support wildcards, e.g. `api/products/*` or `*/products/*`  
+
+```php  
+$routes = Introspect::routes()  
+    ->wherePathStartsWith('api/products')
+    ->get();
+
+$routes = Introspect::routes()
+    ->wherePathEndsWith('products')
+    ->get();
+
+$routes = Introspect::routes()
+    ->wherePathContains('products')
+    ->get();
+
+$routes = Introspect::routes()
+    ->wherePathEquals('api/products*')
+    ->get();
+```
+
+#### Query routes by method
+```php
+
+#### Query views by view path  
+```php  
+$views = Introspect::views()  
+    // Supports wildcards 
+    ->whereNameEquals('components.*.item')
+    ->get();
+    
+$views = Introspect::views()  
+    ->whereNameStartsWith('filament::')
+    ->get();  
+
+$views = Introspect::views()  
+    ->whereNameEndsWith('button')
+    ->get();  
+
+$views = Introspect::views()  
+    ->whereNameContains('button')
+    ->get();
+```  
+
 ### Models
 #### Query by relationship
 ```php  
@@ -144,77 +296,7 @@ $models = Introspect::models()
 $models = Introspect::models()  
     ->whereCastWith(CustomCoordinateCast::class)
     ->get();
-```  
-
-### Routes
-#### Query all routes that use a controller  
-```php  
-$routes = Introspect::routes()  
-    ->whereController(MyController::class)  
-    ->whereMethod('index')    
-    ->get();
-```  
-
-#### Query all routes that use a specific middleware  
-```php  
-$routes = Introspect::routes()  
-    ->whereMiddleware(MyMiddleware::class)  
-    ->whereMiddleware('web')
-    ->get();
-```  
-
-#### Query routes by name
-```php  
-$routes = Introspect::routes()  
-    ->whereNameStartsWith('api.products.')
-    ->get();
-
-$routes = Introspect::routes()  
-    ->whereNameEndsWith('api.products.')
-    ->get();
-```  
-
-#### Query routes by name
-```php  
-$routes = Introspect::routes()  
-    ->whereNameStartswith('api.products.')
-    ->get();
-```  
-
-### Views  
-  
-#### Query all views that are used in specific views  
-```php  
-$routes = Introspect::views()  
-    ->whereUsedIn('pages.welcome')
-    ->get();
-```  
-  
-#### Query all views that use a specific view  
-```php  
-$routes = Introspect::views()  
-    ->whereUses('components.button')   
-    ->get();
-
-$routes = Introspect::views()  
-    ->whereExtends('layouts.app')   
-    ->get();
-```  
-  
-#### Query views by view path  
-```php  
-$views = Introspect::views()  
-    ->whereNameStartsWith('pages.')
-    ->get();  
-
-$views = Introspect::views()  
-    ->whereNameEndsWith('button')
-    ->get();  
-
-$views = Introspect::views()  
-    ->whereNameContains('button')
-    ->get();
-```  
+```
 
 ### Generic Classes
 
@@ -246,11 +328,34 @@ $blocks = Introspect::classes()
     ->get();
 ```
 
-### Search through your codebase using vector embeddings  
-  
-Introspect has support for indexing and querying your codebase using vector embeddings.   
-It does so using the [LLM Magic](https://github.com/capevace/llm-magic) package, which allows you to use most popular LLMs using your own API keys.  
-  
+### Chaining queries with `OR` and `AND`
+
+By default, any queries are combined with `AND` logic.
+However, you can craft more complex queries by chaining together queries with `OR` logic, too.
+This works for all queries, including models, routes, views and classes.
+
+```php
+use \Mateffy\Introspect\Query\Contracts\RouteQueryInterface;
+
+$routes = Introspect::routes()  
+    ->whereNameEquals('api.*')
+    ->whereMethod('POST')
+    ->or(fn (RouteQueryInterface $query) => $query
+        ->whereHasParameter('product') //
+        ->whereHasParameter('category')
+    )
+    ->get();
+```
+
+Some methods support multiple parameters, e.g. `whereUsesMiddlewares([...])` or `whereUsesProperties([...])`.
+These methods have an `all` parameter that defaults to `true`. If set to `false`, the values are checked with `OR` logic too, matching on any of the values.
+
+```php
+$routes = Introspect::routes()  
+    ->whereUsesMiddlewares(['tenant', 'auth'], all: false)  
+    ->get();
+```
+
 ### Limit the results and paginate just like using Eloquent queries  
 ```php  
 $models = Introspect::models()  
