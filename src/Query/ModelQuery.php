@@ -31,6 +31,8 @@ class ModelQuery extends ClassQuery implements ModelQueryInterface, PaginationIn
             ->map(fn (ReflectionClass $class) => ModelReflector::makeFromReflection($class))
             ->filter(fn (ModelReflector $class) => $this->wheres->every(fn (Where $where) => $where->filter($class)))
             ->values()
-            ->map(fn (ModelReflector $class) => $class->dto());
+            ->map(fn (ModelReflector $class) => $class->dto())
+            ->when($this->offset !== null, fn (Collection $collection) => $collection->skip($this->offset))
+            ->when($this->limit !== null, fn (Collection $collection) => $collection->take($this->limit));
     }
 }

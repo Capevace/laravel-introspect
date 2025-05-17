@@ -37,7 +37,9 @@ class RouteQuery implements PaginationInterface, QueryPerformerInterface, RouteQ
         return collect($router->getRoutes())
             ->filter(fn (Route $route) => $this->filterUsingQuery($route))
             ->values()
-            ->map(fn (Route $route) => $this->transformResult($route));
+            ->map(fn (Route $route) => $this->transformResult($route))
+            ->when($this->offset !== null, fn (Collection $collection) => $collection->skip($this->offset))
+            ->when($this->limit !== null, fn (Collection $collection) => $collection->take($this->limit));
     }
 
     protected function transformResult(Route $route): Route

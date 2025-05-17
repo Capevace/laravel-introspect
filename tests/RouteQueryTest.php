@@ -1,5 +1,6 @@
 <?php
 
+use Workbench\App\Controllers\SingleActionTestController;
 use Workbench\App\Controllers\TestController;
 use Workbench\App\Controllers\UnusedTestController;
 
@@ -11,6 +12,24 @@ it('can query all routes', function () use ($totalRoutes) {
         ->get();
 
     expect($routes)->toHaveCount($totalRoutes);
+});
+
+it('can offset routes', function () use ($totalRoutes) {
+    $routes = introspect()
+        ->routes()
+        ->offset(2)
+        ->get();
+
+    expect($routes->count())->toEqual($totalRoutes - 2);
+});
+
+it('can limit routes', function () {
+    $routes = introspect()
+        ->routes()
+        ->limit(2)
+        ->get();
+
+    expect($routes->count())->toEqual(2);
 });
 
 it('can query for controllers', function (string $controller, int $count) {
@@ -30,6 +49,33 @@ it('can query for controllers', function (string $controller, int $count) {
     ->with([
         [TestController::class, 1],
         [UnusedTestController::class, 0],
+    ]);
+
+it('can query for controllers and action', function (string $controller, ?string $fn, int $count) {
+    $routes = introspect()
+        ->routes()
+        ->whereUsesController($controller, $fn)
+        ->get();
+
+    expect($routes)->toHaveCount($count, message: "Expected {$count} routes for controller: {$controller} and action: {$fn}");
+
+    if ($count === 0) {
+        return;
+    }
+
+    expect($routes->first()?->getController()::class)->toBe($controller);
+})
+    ->with([
+        [TestController::class, null, 1],
+        [UnusedTestController::class, null, 0],
+        [TestController::class, 'index', 1],
+        [TestController::class, 'indexNOOOOOO', 0],
+        [UnusedTestController::class, 'index', 0],
+        [SingleActionTestController::class, null, 1],
+        [SingleActionTestController::class, SingleActionTestController::class, 1],
+        // Important to test __invoke, that's custom behaviour of our library!
+        [SingleActionTestController::class, '__invoke', 1],
+        [SingleActionTestController::class, '__invokeNOOOOO', 0],
     ]);
 
 it('can query for controllers (not)', function (string $controller, int $count) {

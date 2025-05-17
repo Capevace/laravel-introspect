@@ -12,6 +12,24 @@ it('can query all views', function () use ($totalViews) {
     expect($views)->toHaveCount($totalViews);
 });
 
+it('can offset views', function () use ($totalViews) {
+    $views = introspect()
+        ->views()
+        ->offset(2)
+        ->get();
+
+    expect($views->count())->toEqual($totalViews - 2);
+});
+
+it('can limit views', function () {
+    $views = introspect()
+        ->views()
+        ->limit(2)
+        ->get();
+
+    expect($views->count())->toEqual(2);
+});
+
 it('can query by name', function (string $text, string $method, int $count) use ($totalViews) {
     $query = introspect()->views();
     $oppositeQuery = introspect()->views();

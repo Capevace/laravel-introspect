@@ -16,11 +16,11 @@ use Mateffy\Introspect\Query\Where\Routes\WhereRouteUsesMiddlewares;
 
 trait WhereRoutes
 {
-    public function whereNameStartsWith(string|array $text, bool $all = true): static
+    public function whereNameStartsWith(string|array $text): static
     {
         $this->wheres->push(new WhereRouteNameStartsWith(
             is_array($text) ? $text : [$text],
-            all: $all
+            all: false
         ));
 
         return $this;
@@ -37,11 +37,11 @@ trait WhereRoutes
         return $this;
     }
 
-    public function whereNameEndsWith(string|array $text, bool $all = true): static
+    public function whereNameEndsWith(string|array $text): static
     {
         $this->wheres->push(new WhereRouteNameEndsWith(
             is_array($text) ? $text : [$text],
-            all: $all
+            all: false
         ));
 
         return $this;
@@ -121,11 +121,11 @@ trait WhereRoutes
         return $this;
     }
 
-    public function wherePathEndsWith(string|array $text, bool $all = true): static
+    public function wherePathEndsWith(string|array $text): static
     {
         $this->wheres->push(new WhereRoutePathEndsWith(
             is_array($text) ? $text : [$text],
-            all: $all
+            all: false
         ));
 
         return $this;
@@ -142,11 +142,11 @@ trait WhereRoutes
         return $this;
     }
 
-    public function wherePathStartsWith(string|array $text, bool $all = true): static
+    public function wherePathStartsWith(string|array $text): static
     {
         $this->wheres->push(new WhereRoutePathStartsWith(
             is_array($text) ? $text : [$text],
-            all: $all
+            all: false
         ));
 
         return $this;

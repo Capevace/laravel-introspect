@@ -160,6 +160,10 @@ $routes = Introspect::routes()
 $routes = Introspect::routes()  
     ->whereUsesController(MyController::class, 'index')
     ->get();
+    
+$routes = Introspect::routes()  
+    ->whereUsesController(SingleActionController::class, 'index')
+    ->get();
 ```  
 
 #### Query all routes that use a specific middleware  

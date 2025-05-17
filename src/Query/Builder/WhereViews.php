@@ -40,11 +40,11 @@ trait WhereViews
         return $this;
     }
 
-    public function whereNameStartsWith(string|array $text, bool $all = true): ViewQueryInterface
+    public function whereNameStartsWith(string|array $text): ViewQueryInterface
     {
         $this->wheres->push(new WhereViewNameStartsWith(
             texts: is_array($text) ? $text : [$text],
-            all: $all
+            all: false
         ));
 
         return $this;
@@ -61,11 +61,11 @@ trait WhereViews
         return $this;
     }
 
-    public function whereNameEndsWith(string|array $text, bool $all = true): ViewQueryInterface
+    public function whereNameEndsWith(string|array $text): ViewQueryInterface
     {
         $this->wheres->push(new WhereViewNameEndsWith(
             texts: is_array($text) ? $text : [$text],
-            all: $all
+            all: false
         ));
 
         return $this;

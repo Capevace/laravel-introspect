@@ -14,6 +14,24 @@ it('can query all models', function () use ($totalModels) {
     expect($classes)->toHaveCount($totalModels);
 });
 
+it('can offset models', function () use ($totalModels) {
+    $models = introspect()
+        ->models()
+        ->offset(2)
+        ->get();
+
+    expect($models->count())->toEqual($totalModels - 2);
+});
+
+it('can limit models', function () use ($totalModels) {
+    $models = introspect()
+        ->models()
+        ->limit(2)
+        ->get();
+
+    expect($models->count())->toEqual(2);
+});
+
 it('can query by properties', function (string|array $property, string $method, int $count, bool $all = true) use ($totalModels) {
     $query = introspect()->models();
     $oppositeQuery = introspect()->models();

@@ -9,12 +9,30 @@ use Workbench\App\Traits\TestTrait;
 
 $totalClasses = 8;
 
-it('can query all classes', function () {
+it('can query all classes', function () use ($totalClasses) {
     $classes = introspect()
         ->classes()
         ->get();
 
-    expect($classes->count())->toBeGreaterThan(0);
+    expect($classes->count())->toEqual($totalClasses);
+});
+
+it('can offset classes', function () use ($totalClasses) {
+    $classes = introspect()
+        ->classes()
+        ->offset(2)
+        ->get();
+
+    expect($classes->count())->toEqual($totalClasses - 2);
+});
+
+it('can limit classes', function () use ($totalClasses) {
+    $classes = introspect()
+        ->classes()
+        ->limit(2)
+        ->get();
+
+    expect($classes->count())->toEqual(2);
 });
 
 it('can query for classes extending another class', function (string $baseClass, int $count) {

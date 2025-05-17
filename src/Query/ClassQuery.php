@@ -93,7 +93,9 @@ class ClassQuery implements ClassQueryInterface, PaginationInterface, QueryPerfo
             ->map(fn (string $class) => $reflector->reflectClass($class))
             ->filter(fn (ReflectionClass $class) => $this->filterUsingQuery($class))
             ->values()
-            ->map(fn (ReflectionClass $class) => $this->transformResult($class));
+            ->map(fn (ReflectionClass $class) => $this->transformResult($class))
+            ->when($this->offset !== null, fn (Collection $collection) => $collection->skip($this->offset))
+            ->when($this->limit !== null, fn (Collection $collection) => $collection->take($this->limit));
     }
 
     public function paginate(int $limit, int $offset): LengthAwarePaginator

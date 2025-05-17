@@ -99,7 +99,9 @@ class ViewQuery implements PaginationInterface, QueryPerformerInterface, ViewQue
             ->flatMap(fn (ViewRepository $views) => $views->getViewsAsAbsoluteString())
             ->filter(fn (string $view) => $this->filterUsingQuery($view))
             ->values()
-            ->map(fn (string $view) => $this->transformResult($view));
+            ->map(fn (string $view) => $this->transformResult($view))
+            ->when($this->offset !== null, fn (Collection $collection) => $collection->skip($this->offset))
+            ->when($this->limit !== null, fn (Collection $collection) => $collection->take($this->limit));
     }
 
     protected function transformResult(string $view): string
