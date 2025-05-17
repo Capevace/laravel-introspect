@@ -4,6 +4,7 @@ namespace Mateffy\Introspect\Reflection;
 
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Collection;
 use InvalidArgumentException;
 use Mateffy\Introspect\Reflection\ModelReflector\HasProperties;
 use ReflectionException;

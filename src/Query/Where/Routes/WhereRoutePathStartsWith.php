@@ -13,7 +13,7 @@ class WhereRoutePathStartsWith implements RouteWhere
     /**
      * @param  Route  $value
      */
-    protected function getName($value): string
+    protected function getName($value): ?string
     {
         return $value->uri();
     }

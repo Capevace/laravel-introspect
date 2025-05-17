@@ -17,10 +17,6 @@ class WhereSerializer
         $class = match ($data['type']) {
             default => throw new InvalidArgumentException('Unknown where type: '.$data['type']),
             'nested' => NestedWhere::class,
-            'nested:class' => Classes\NestedClassWhereInterface::class,
-            //            'nested:view' => Views\NestedViewWhere::class,
-            //            'nested:route' => Routes\NestedRouteWhere::class,
-            //            'nested:controller' => Controllers\NestedControllerWhere::class,q
 
             // View wheres
             'view-used-by' => Views\WhereUsedByView::class,

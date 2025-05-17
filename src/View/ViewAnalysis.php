@@ -3,6 +3,7 @@
 namespace Mateffy\Introspect\View;
 
 use Illuminate\View\FileViewFinder;
+use Mateffy\Introspect\RegexHelper;
 
 class ViewAnalysis
 {
@@ -35,10 +36,34 @@ class ViewAnalysis
 
         // Remove 'components.' to normalize the view.
         // Watch out: we also need to support namespaces, so we check for '::' in the view name.
-        if (str_contains($includedView, '::')) {
+
+        $hasComponentAtStart = preg_match('/^components\./', $includedView);
+        $hasComponentAfterNamespace = preg_match('/::components\./', $includedView);
+        $startsWithWildcard = preg_match('/^\*/', $includedView);
+        $startsWithWildcardAfterNamespace = preg_match('/::\*/', $includedView);
+
+        $debug = $includedView === 'workbench::*.wtf.test*';
+
+//        if ($debug) {
+//            dd($hasComponentAtStart, $hasComponentAfterNamespace, $startsWithWildcard, $startsWithWildcardAfterNamespace, str_contains($includedView, '::'));
+//        }
+
+        // If the view DOESNT contain ^components. or ::components., we set $includedViewWithoutComponentPrefix to null, in order to not "fake" the component prefix.
+        if (!$hasComponentAtStart && !$hasComponentAfterNamespace && !$startsWithWildcard && !$startsWithWildcardAfterNamespace) {
+            $includedViewWithoutComponentPrefix = null;
+        } elseif (str_contains($includedView, '::')) {
             $before = str($includedView)->before('::');
             $after = str($includedView)->after('::');
             $filtered = str_replace('components.', '', $after);
+
+            if ($startsWithWildcardAfterNamespace) {
+                $includedView = str_replace('::*', '::components*', $includedView);
+
+                // For components to work, we need to remove the period from the wildcard so that the @component and <x- things work correctly
+                if (str_starts_with($filtered, '*.')) {
+                    $filtered = "*" . str($filtered)->after('*.');
+                }
+            }
 
             $includedViewWithoutComponentPrefix = $before.'::'.$filtered;
         } else {
@@ -50,10 +75,12 @@ class ViewAnalysis
             : $this->checkLiteral($contents, $includedView, $includedViewWithoutComponentPrefix);
     }
 
-    protected function checkLiteral(string $contents, string $name, string $nameWithoutPrefix): bool
+    protected function checkLiteral(string $contents, string $name, ?string $nameWithoutPrefix): bool
     {
+        // If $nameWithoutPrefix is null, that means we don't check for components, only @include
+
         // 1. Check if the file contains the <x- version
-        if (str_contains($contents, '<x-'.$nameWithoutPrefix)) {
+        if ($nameWithoutPrefix !== null && str_contains($contents, '<x-'.$nameWithoutPrefix)) {
             return true;
         }
 
@@ -64,7 +91,7 @@ class ViewAnalysis
         }
 
         // 3. Check if the file contains the @component version
-        if (preg_match('/@component\s*\(\s*[\'"]'.preg_quote($nameWithoutPrefix, '/').'[\'"]/', $contents)) {
+        if ($nameWithoutPrefix !== null && preg_match('/@component\s*\(\s*[\'"]'.preg_quote($nameWithoutPrefix, '/').'[\'"]/', $contents)) {
             return true;
         }
 
@@ -78,17 +105,19 @@ class ViewAnalysis
      * Multiple wildcards are supported, so $name can be 'components::foo.*.bar.*' and $nameWithoutPrefix can be 'foo.*.bar.*'.
      * This will match contained views like 'components::foo.baz.bar.baz' and 'components::foo.baz.bar.baz.baz'.
      */
-    protected function checkWithWildcard(string $contents, string $name, string $nameWithoutPrefix): bool
+    protected function checkWithWildcard(string $contents, string $name, ?string $nameWithoutPrefix): bool
     {
+        // If $nameWithoutPrefix is null, that means we don't check for components, only @include
+
         // Convert wildcard view names to regex patterns
         // preg_quote will escape the wildcard '*' to '\*'. We replace '\*' with a pattern matching a view segment.
-        $nameRegex = str_replace('\\*', self::VIEW_SEGMENT_PATTERN, preg_quote($name, '/'));
-        $nameWithoutPrefixRegex = str_replace('\\*', self::VIEW_SEGMENT_PATTERN, preg_quote($nameWithoutPrefix, '/'));
+        $nameRegex = str_replace('\\*', self::VIEW_SEGMENT_PATTERN, RegexHelper::escape($name));
+        $nameWithoutPrefixRegex = str_replace('\\*', self::VIEW_SEGMENT_PATTERN, RegexHelper::escape($nameWithoutPrefix ?? ''));
 
         // 1. Check for <x- version with wildcard
         // We match <x- followed by the component name (with wildcards), and then either a space, >, or / (for self-closing tags)
         $xComponentRegex = '/<x-'.$nameWithoutPrefixRegex.'([\s>\/>])/';
-        if (preg_match($xComponentRegex, $contents)) {
+        if ($nameWithoutPrefix && preg_match($xComponentRegex, $contents)) {
             return true;
         }
 
@@ -98,7 +127,7 @@ class ViewAnalysis
         }
 
         // 3. Check for @component version with wildcard
-        if (preg_match('/@component\s*\(\s*[\'"]'.$nameWithoutPrefixRegex.'[\'"]/', $contents)) {
+        if ($nameWithoutPrefix && preg_match('/@component\s*\(\s*[\'"]'.$nameWithoutPrefixRegex.'[\'"]/', $contents)) {
             return true;
         }
 

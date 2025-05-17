@@ -2,6 +2,8 @@
 
 namespace Mateffy\Introspect\Query\Where\Generic;
 
+use Mateffy\Introspect\RegexHelper;
+
 trait WhereTextEquals
 {
     use WhereTextComparison;
@@ -11,7 +13,7 @@ trait WhereTextEquals
         // If the string contains a wildcard, we replace it with a regex pattern (.*) and check for equality by matching the regex
         // otherwise we just check for equality
         if (str_contains($needle, '*')) {
-            $pattern = str_replace('*', '.*', $needle);
+            $pattern = RegexHelper::escape($needle);
 
             return preg_match('/^'.$pattern.'$/i', $haystack) === 1;
         } else {

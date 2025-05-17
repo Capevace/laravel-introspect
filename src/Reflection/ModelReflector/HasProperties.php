@@ -23,10 +23,20 @@ trait HasProperties
     public const DEFAULT_TO_STRING = false;
 
     /**
+     * @var Collection<string, ModelProperty>|null
+     */
+    protected ?Collection $properties = null;
+
+    /**
+     * @return Collection<string, ModelProperty>
      * @throws ReflectionException
      */
-    public function properties(): Collection
+    public function properties(bool $ignoreCache = false): Collection
     {
+        if ($this->properties !== null && ! $ignoreCache) {
+            return $this->properties;
+        }
+
         $propertiesFromDocblock = $this->parsePropertiesFromDocblock()
             ->keyBy('name');
 
@@ -69,7 +79,7 @@ trait HasProperties
             }
         }
 
-        return $properties;
+        return $this->properties = $properties;
     }
 
     protected function parsePropertiesFromEloquent(): Collection
@@ -103,7 +113,7 @@ trait HasProperties
             ->unique()
             ->filter(fn (string $property) => $property !== '*')
             ->values()
-            ->map(function (string $property) use ($fillable, $hidden, $guarded, $casts, $dates, $appends, $visible, $relations, $defaultAttributes) {
+            ->mapWithKeys(function (string $property) use ($fillable, $hidden, $guarded, $casts, $dates, $appends, $visible, $relations, $defaultAttributes) {
                 $isFillable = in_array($property, $fillable);
                 $isHidden = in_array($property, $hidden);
                 $isGuarded = in_array($property, $guarded);

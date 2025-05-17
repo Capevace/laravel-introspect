@@ -69,13 +69,39 @@ $schema = $detail->schema();
 <br />
 
 ### Views  
+
+You can query all of the views you have in your codebase, including those that are provided by other packages and are namespaced with a `prefix::`.
+View queries return a `Collection<string>` of view names.
+
 > All queries support wildcards, e.g. `components.*.button` or `*.button`
+
+#### Query views by view path  
+```php  
+$views = Introspect::views()  
+    // Supports wildcards 
+    ->whereNameEquals('*components.*item')
+    ->get();
+// -> ['components.item', 'filament::components.dropdown.list.item', ...]
+    
+$views = Introspect::views()  
+    ->whereNameStartsWith('filament::')
+    ->get();  
+
+$views = Introspect::views()  
+    ->whereNameEndsWith('button')
+    ->get();  
+
+$views = Introspect::views()  
+    ->whereNameContains('button')
+    ->get();
+```  
 
 #### Query all views that are used by specific views  
 ```php  
 $routes = Introspect::views()  
     ->whereUsedBy('pages.welcome')
     ->get();
+// -> ['components.button', 'filament::components.button', ...]
     
 $routes = Introspect::views()  
     ->whereUsedBy('pages.*')
@@ -120,11 +146,16 @@ $routes = Introspect::views()
 <br />
 
 ### Routes
+
+Query through all the routes registered in your application (think like `artisan route:list` output), including those registered by packages.
+The routes are returned as a `Collection<\Illuminate\Routing\Route>`.
+
 #### Query all routes that use a controller  
 ```php  
 $routes = Introspect::routes()  
     ->whereUsesController(MyController::class)  
     ->get();
+// -> [\Illuminate\Routing\Route, \Illuminate\Routing\Route, ...]
 
 $routes = Introspect::routes()  
     ->whereUsesController(MyController::class, 'index')
@@ -193,28 +224,37 @@ $routes = Introspect::routes()
     ->get();
 ```
 
-#### Query routes by method
+<br />
+
+### Generic Classes
+
+#### Query by namespace
 ```php
-
-#### Query views by view path  
-```php  
-$views = Introspect::views()  
-    // Supports wildcards 
-    ->whereNameEquals('components.*.item')
+$services = Introspect::classes()  
+    ->whereNamespace('\App\Services')
     ->get();
-    
-$views = Introspect::views()  
-    ->whereNameStartsWith('filament::')
-    ->get();  
+```
 
-$views = Introspect::views()  
-    ->whereNameEndsWith('button')
-    ->get();  
-
-$views = Introspect::views()  
-    ->whereNameContains('button')
+#### Query by parent
+```php
+$blocks = Introspect::classes()  
+    ->whereExtends(CMS\Block::class)
     ->get();
-```  
+```
+
+#### Query by interface
+```php
+$blocks = Introspect::classes()  
+    ->whereImplements(CMS\Block::class)
+    ->get();
+```
+
+#### Query by trait
+```php
+$blocks = Introspect::classes()  
+    ->whereUses(MyTrait::class)
+    ->get();
+```
 
 <br />
 
@@ -299,38 +339,6 @@ $models = Introspect::models()
     
 $models = Introspect::models()  
     ->whereCastWith(CustomCoordinateCast::class)
-    ->get();
-```
-
-<br />
-
-### Generic Classes
-
-#### Query by namespace
-```php
-$services = Introspect::classes()  
-    ->whereNamespace('\App\Services')
-    ->get();
-```
-
-#### Query by parent
-```php
-$blocks = Introspect::classes()  
-    ->whereExtends(CMS\Block::class)
-    ->get();
-```
-
-#### Query by interface
-```php
-$blocks = Introspect::classes()  
-    ->whereImplements(CMS\Block::class)
-    ->get();
-```
-
-#### Query by trait
-```php
-$blocks = Introspect::classes()  
-    ->whereUses(MyTrait::class)
     ->get();
 ```
 

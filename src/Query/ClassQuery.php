@@ -17,6 +17,7 @@ use Roave\BetterReflection\Reflection\ReflectionClass;
 use Roave\BetterReflection\Reflector\DefaultReflector;
 use Roave\BetterReflection\SourceLocator\SourceStubber\ReflectionSourceStubber;
 use Roave\BetterReflection\SourceLocator\Type\AggregateSourceLocator;
+use Roave\BetterReflection\SourceLocator\Type\AutoloadSourceLocator;
 use Roave\BetterReflection\SourceLocator\Type\Composer\Factory\MakeLocatorForComposerJsonAndInstalledJson;
 use Roave\BetterReflection\SourceLocator\Type\DirectoriesSourceLocator;
 use Roave\BetterReflection\SourceLocator\Type\PhpInternalSourceLocator;
@@ -60,14 +61,17 @@ class ClassQuery implements ClassQueryInterface, PaginationInterface, QueryPerfo
             $paths = collect([$this->path]);
         } else {
             $paths = collect($this->directories)
-                ->map(fn (string $directory) => "{$this->path}/{$directory}")
-                ->all();
+                ->map(fn (string $directory) => "{$this->path}/{$directory}");
         }
+
+        $paths = $paths
+            ->filter(fn (string $path) => is_dir($path))
+            ->values();
 
         $astLocator = (new BetterReflection)->astLocator();
         $reflector = new DefaultReflector(new AggregateSourceLocator([
-            new DirectoriesSourceLocator($paths, $astLocator),
-            (new MakeLocatorForComposerJsonAndInstalledJson)($this->path, $astLocator),
+            new DirectoriesSourceLocator($paths->all(), $astLocator),
+            new AutoloadSourceLocator($astLocator),
             new PhpInternalSourceLocator($astLocator, new ReflectionSourceStubber),
         ]));
 
