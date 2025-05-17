@@ -5,6 +5,12 @@ use Mateffy\Introspect\LaravelIntrospect;
 use Mateffy\Introspect\Tests\Fixtures\TestModel;
 use Mateffy\Introspect\Tests\Fixtures\TestModelWithDocblock;
 
+it('can see all properties with just eloquent', function () {
+    $model = introspect()->model(TestModelWithDocblock::class);
+
+    dd($model);
+});
+
 //if (! function_exists('expectPropertyToBe')) {
 //    function expectPropertyToBe(
 //        ModelProperty $property,

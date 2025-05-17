@@ -13,6 +13,6 @@ class WhereHasWritableProperties extends WhereHasProperties
      */
     public function check(ModelReflector $reflector, Collection $properties, string $property): bool
     {
-        return $properties->get($property)?->writable;
+        return $properties->get($property)?->writable ?? false;
     }
 }

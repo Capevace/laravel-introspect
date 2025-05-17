@@ -13,6 +13,6 @@ class WhereHasFillableProperties extends WhereHasProperties
      */
     public function check(ModelReflector $reflector, Collection $properties, string $property): bool
     {
-        return $properties->get($property)?->fillable;
+        return $properties->get($property)?->fillable ?? false;
     }
 }

@@ -13,6 +13,6 @@ class WhereHasReadableProperties extends WhereHasProperties
      */
     public function check(ModelReflector $reflector, Collection $properties, string $property): bool
     {
-        return $properties->get($property)?->readable;
+        return $properties->get($property)?->readable ?? false;
     }
 }

@@ -6,6 +6,11 @@ use DateTimeInterface;
 use Illuminate\Database\Eloquent\Model;
 
 /**
+ * This is the short description in the first line of the model.
+ *
+ * This is a second line of the description.
+ * This is another line.
+ *
  * @property string $name
  * @property string $email
  * @property string $password

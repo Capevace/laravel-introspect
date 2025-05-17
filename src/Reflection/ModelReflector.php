@@ -2,6 +2,7 @@
 
 namespace Mateffy\Introspect\Reflection;
 
+use Illuminate\Container\Container;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
@@ -15,9 +16,9 @@ class ModelReflector implements Arrayable
     use HasProperties;
 
     public function __construct(
-        protected string $model,
-        protected Model $instance,
-        protected ReflectionClass $reflection
+        public readonly string $model,
+        public readonly Model $instance,
+        public readonly ReflectionClass $reflection
     ) {}
 
     /**
@@ -35,10 +36,13 @@ class ModelReflector implements Arrayable
 
         $instance = new $class;
 
-        return new self(
-            model: $class,
-            instance: $instance,
-            reflection: ReflectionClass::createFromInstance($instance)
+        return Container::getInstance()->make(
+            self::class,
+            [
+                'model' => $class,
+                'instance' => $instance,
+                'reflection' => ReflectionClass::createFromInstance($instance),
+            ]
         );
     }
 
@@ -47,7 +51,7 @@ class ModelReflector implements Arrayable
         if ($reflection->isAbstract()) {
             throw new InvalidArgumentException("Class {$reflection->getName()} is not instantiable.");
         }
-        //
+
         if (! $reflection->isSubclassOf(Model::class)) {
             throw new InvalidArgumentException("Class {$reflection->getName()} is not a subclass of ".Model::class);
         }
@@ -71,5 +75,36 @@ class ModelReflector implements Arrayable
             'model' => $this->model,
             'properties' => $this->properties()->toArray(),
         ];
+    }
+
+    /**
+     * @throws ReflectionException
+     */
+    public function dto(): \Mateffy\Introspect\DTO\Model
+    {
+        $description = str($this->reflection->getDocComment() ?? '')
+            ->explode("\n")
+            ->filter(fn (string $line) => !str($line)
+                ->trim()
+                ->startsWith(['/**', '*/', '*@', '* @', '@'])
+            )
+            ->map(fn (string $line) => str($line)
+                ->ltrim(' *')
+                ->ltrim('*')
+                ->trim()
+            )
+            ->join("\n");
+
+        if ($description === '') {
+            $description = null;
+        }
+
+        $description = trim($description);
+
+        return new \Mateffy\Introspect\DTO\Model(
+            classpath: $this->model,
+            description: $description,
+            properties: $this->properties(),
+        );
     }
 }

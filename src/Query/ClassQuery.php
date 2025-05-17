@@ -52,10 +52,7 @@ class ClassQuery implements ClassQueryInterface, PaginationInterface, QueryPerfo
             ->every(fn (Where $where) => $where->filter($class));
     }
 
-    /**
-     * @throws JsonException
-     */
-    public function get(): Collection
+    protected function getPaths(): Collection
     {
         if (count($this->directories) === 0) {
             $paths = collect([$this->path]);
@@ -64,20 +61,35 @@ class ClassQuery implements ClassQueryInterface, PaginationInterface, QueryPerfo
                 ->map(fn (string $directory) => "{$this->path}/{$directory}");
         }
 
-        $paths = $paths
+        return $paths
             ->filter(fn (string $path) => is_dir($path))
             ->values();
+    }
 
+    protected function makeReflector(Collection $paths): DefaultReflector
+    {
         $astLocator = (new BetterReflection)->astLocator();
-        $reflector = new DefaultReflector(new AggregateSourceLocator([
+
+        return new DefaultReflector(new AggregateSourceLocator([
             new DirectoriesSourceLocator($paths->all(), $astLocator),
             new AutoloadSourceLocator($astLocator),
             new PhpInternalSourceLocator($astLocator, new ReflectionSourceStubber),
         ]));
+    }
 
+    protected function getAllClasses(Collection $paths, DefaultReflector $reflector): Collection
+    {
         $discover = Discover::in(...$paths);
 
-        return collect($discover->classes()->get())
+        return collect($discover->classes()->get());
+    }
+
+    public function get(): Collection
+    {
+        $paths = $this->getPaths();
+        $reflector = $this->makeReflector($paths);
+
+        return $this->getAllClasses($paths, $reflector)
             ->map(fn (string $class) => $reflector->reflectClass($class))
             ->filter(fn (ReflectionClass $class) => $this->filterUsingQuery($class))
             ->values()

@@ -56,7 +56,7 @@ trait HasProperties
             $eloquentProperty = $propertiesFromEloquent->get($property);
 
             if ($docblockProperty && $eloquentProperty) {
-                $properties[$property] = new ModelProperty(
+                $properties->put($property, new ModelProperty(
                     name: $property,
                     description: $docblockProperty->description,
                     default: $eloquentProperty->default,
@@ -71,11 +71,11 @@ trait HasProperties
                         ->merge($eloquentProperty->types)
                         ->unique()
                         ->values()
-                );
+                ));
             } elseif ($docblockProperty) {
-                $properties[$property] = $docblockProperty;
+                $properties->put($property, $docblockProperty);
             } elseif ($eloquentProperty) {
-                $properties[$property] = $eloquentProperty;
+                $properties->put($property, $eloquentProperty);
             }
         }
 
@@ -140,21 +140,23 @@ trait HasProperties
                     $types->push('string');
                 }
 
-                return new ModelProperty(
-                    name: $property,
-                    description: null,
-                    default: $defaultAttributes[$property] ?? null,
-                    readable: true,
-                    writable: true,
-                    fillable: $isActuallyFillable,
-                    hidden: $isActuallyHidden,
-                    appended: $isAppended,
-                    relation: $isRelation,
-                    cast: $cast ?? ($isDate ? DateTimeInterface::class : null),
-                    types: $types
-                        ->unique()
-                        ->values()
-                );
+                return [
+                    $property => new ModelProperty(
+                        name: $property,
+                        description: null,
+                        default: $defaultAttributes[$property] ?? null,
+                        readable: true,
+                        writable: true,
+                        fillable: $isActuallyFillable,
+                        hidden: $isActuallyHidden,
+                        appended: $isAppended,
+                        relation: $isRelation,
+                        cast: $cast ?? ($isDate ? DateTimeInterface::class : null),
+                        types: $types
+                            ->unique()
+                            ->values()
+                    )
+                ];
             });
     }
 

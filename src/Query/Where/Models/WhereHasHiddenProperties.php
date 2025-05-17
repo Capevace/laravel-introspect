@@ -13,6 +13,6 @@ class WhereHasHiddenProperties extends WhereHasProperties
      */
     public function check(ModelReflector $reflector, Collection $properties, string $property): bool
     {
-        return $properties->get($property)?->hidden;
+        return $properties->get($property)?->hidden ?? false;
     }
 }

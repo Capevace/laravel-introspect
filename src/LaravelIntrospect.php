@@ -3,12 +3,14 @@
 namespace Mateffy\Introspect;
 
 use Illuminate\Container\Container;
+use Mateffy\Introspect\DTO\Model;
 use Mateffy\Introspect\Query\Contracts\ClassQueryInterface;
 use Mateffy\Introspect\Query\Contracts\ModelQueryInterface;
 use Mateffy\Introspect\Query\Contracts\QueryPerformerInterface;
 use Mateffy\Introspect\Query\Contracts\RouteQueryInterface;
 use Mateffy\Introspect\Query\Contracts\ViewQueryInterface;
 use Mateffy\Introspect\Reflection\ModelReflector;
+use ReflectionException;
 
 class LaravelIntrospect
 {
@@ -23,9 +25,12 @@ class LaravelIntrospect
         $this->path = $path ?? app()->basePath();
     }
 
-    public function model(string $class): ModelReflector
+    /**
+     * @throws ReflectionException
+     */
+    public function model(string $class): Model
     {
-        return Container::getInstance()->make(ModelReflector::class, ['model' => $class]);
+        return ModelReflector::makeFromClasspath($class)->dto();
     }
 
     public function classes(): ClassQueryInterface&QueryPerformerInterface

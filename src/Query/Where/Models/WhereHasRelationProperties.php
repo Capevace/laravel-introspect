@@ -13,6 +13,6 @@ class WhereHasRelationProperties extends WhereHasProperties
      */
     public function check(ModelReflector $reflector, Collection $properties, string $property): bool
     {
-        return $properties->get($property)?->relation;
+        return $properties->get($property)?->relation ?? false;
     }
 }
