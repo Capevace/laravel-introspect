@@ -22,7 +22,7 @@ Then this package will make your life a lot easier by providing a fluent API to 
 | Routes     | name, URI, controller + fn, methods, middleware                        |
 | Classes    | name / namespace, extends parent, implements interfaces, uses traits   |
 | ↳ Models   | ... relationships, properties, casts, fillable, hidden, read/writeable |
-| ↪ Commands | ... signature, description                                             |
+| ⤷ Commands | ... signature, description                                             |
   
 > Name and a few other queries support even support wildcards (e.g. `components.*.paragraph`)
 
