@@ -46,11 +46,26 @@ composer require mateffy/laravel-introspect
 ```php  
 use Mateffy\Introspect\Facades\Introspect;  
 
-$views = Introspect::views()->get();  
-$routes = Introspect::routes()->get();  
-$classes = Introspect::classes()->get();  
-$models = Introspect::models()->get();
-$commands = Introspect::commands()->get();  
+$views = Introspect::views()
+    ->whereNameEquals('components.*.button')
+    ->whereUsedBy('pages.admin.*')
+    ->get();  
+    
+$routes = Introspect::routes()
+    ->whereUsesController(MyController::class)
+    ->whereUsesMiddleware('auth')
+    ->whereUsesMethod('POST')
+    ->get();  
+
+$classes = Introspect::classes()
+    ->whereImplements(MyInterface::class)
+    ->whereUses(MyTrait::class)
+    ->get();  
+    
+$models = Introspect::models()
+    ->whereHasProperties(['name', 'email'])
+    ->whereHasFillable('password')
+    ->get();  
 
 // Access Eloquent properties, relationships, casts, etc. directly
 $detail = Introspect::model(User::class);
