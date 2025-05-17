@@ -117,6 +117,8 @@ $routes = Introspect::views()
     ->get();
 ```
 
+<br />
+
 ### Routes
 #### Query all routes that use a controller  
 ```php  
@@ -214,6 +216,8 @@ $views = Introspect::views()
     ->get();
 ```  
 
+<br />
+
 ### Models
 #### Query by relationship
 ```php  
@@ -298,6 +302,8 @@ $models = Introspect::models()
     ->get();
 ```
 
+<br />
+
 ### Generic Classes
 
 #### Query by namespace
@@ -328,6 +334,8 @@ $blocks = Introspect::classes()
     ->get();
 ```
 
+<br />
+
 ### Chaining queries with `OR` and `AND`
 
 By default, any queries are combined with `AND` logic.
@@ -356,13 +364,19 @@ $routes = Introspect::routes()
     ->get();
 ```
 
-### Limit the results and paginate just like using Eloquent queries  
+<br />
+
+### Limit the results and paginate just like using Eloquent queries
+_Actual Laravel pagination (`->paginate(...)`) is not yet supported, but you can use `limit` and `offset` to get the results you want._  
+
 ```php  
 $models = Introspect::models()  
     ->limit(10)
     ->offset(20)
     ->get();
 ```  
+
+<br />
   
 ### Build Queries with JSON instead of code  
   
@@ -389,6 +403,7 @@ JSON;
 $models = Introspect::query($query)->get();
 ```  
   
+<br />
 
 ## DTO Examples
 
@@ -406,6 +421,7 @@ $schema = Introspect::model(User::class)->schema();
 // -> ['type' => 'object',...]
 ```
 
+<br />
   
 ## License  
   
