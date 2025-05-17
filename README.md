@@ -8,9 +8,13 @@ It is targeted for development tools and coding agents for better understanding 
 Are you building a devtool or other application that needs to introspect a Laravel codebase?  
 Then this package will make your life a lot easier by providing a fluent API to query models, routes, controllers, views and more.
 
+<br />
+
 - Query views, routes, classes and models with a fluent API
 - Parse properties, relationships + their types and more from Eloquent models
 - (De-)serialize queries to/from JSON (for LLM Tools)
+
+<br />
 
 | Query      | Available Filters                                                      |
 |------------|------------------------------------------------------------------------|
@@ -21,6 +25,9 @@ Then this package will make your life a lot easier by providing a fluent API to 
 | ↳ Commands | ... signature, description                                             |
   
 > Name and a few other queries support even support wildcards (e.g. `components.*.paragraph`)
+
+<br />
+
 ## Installation  
   
 Install the package via composer:  
@@ -32,6 +39,8 @@ composer require mateffy/laravel-introspect
 > [!NOTE]  
 > The package is still in development and not tagged, you will be installing the `dev-main` branch for now.
   
+<br />
+
 ## Usage  
   
 ```php  
@@ -50,21 +59,7 @@ $detail = Introspect::model(User::class);
 $schema = $detail->schema();
 ```  
 
-## DTO Examples
-
-#### Get all model properties
-```php
-$model = Introspect::model(User::class);
-$properties = $models->properties();
-$casts = $models->casts();
-$casts = $models->casts();
-```
-
-#### Get Model as JSON schema
-```php
-$schema = Introspect::model(User::class)->schema();
-// -> ['type' => 'object',...]
-```
+<br />
 
 ## Query Examples  
 ### Models
@@ -289,6 +284,23 @@ JSON;
 $models = Introspect::query($query)->get();
 ```  
   
+
+## DTO Examples
+
+#### Get all model properties
+```php
+$model = Introspect::model(User::class);
+$properties = $models->properties();
+$casts = $models->casts();
+$casts = $models->casts();
+```
+
+#### Get Model as JSON schema
+```php
+$schema = Introspect::model(User::class)->schema();
+// -> ['type' => 'object',...]
+```
+
   
 ## License  
   
