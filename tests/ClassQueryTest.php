@@ -195,3 +195,53 @@ it('can query with complex conditions', function () {
     expect($classes)->toHaveCount(1);
     expect($classes->first())->toBe(TestModel::class);
 });
+
+it('can query by name', function (string|array $name, string $method, int $count, bool $all = true) use ($totalClasses) {
+    $query = introspect()->classes();
+    $oppositeQuery = introspect()->classes();
+
+    $names = is_array($name) ? $name : [$name];
+    $namesAsText = implode(', ', $names);
+
+    $classes = (match ($method) {
+        'equals' => $query->whereNameEquals($names),
+        'contains' => $query->whereNameContains($names),
+        'startsWith' => $query->whereNameStartsWith($names),
+        'endsWith' => $query->whereNameEndsWith($names),
+        default => throw new InvalidArgumentException("Invalid method $method"),
+    })->get();
+
+    $oppositeClasses = (match ($method) {
+        'equals' => $oppositeQuery->whereNameDoesntEqual($names, all: $all),
+        'contains' => $oppositeQuery->whereNameDoesntContain($names, all: $all),
+        'startsWith' => $oppositeQuery->whereNameDoesntStartWith($names, all: $all),
+        'endsWith' => $oppositeQuery->whereNameDoesntEndWith($names, all: $all),
+        default => throw new InvalidArgumentException("Invalid method $method"),
+    })->get();
+
+    $oppositeCount = $totalClasses - $count;
+
+    expect($classes)
+        ->toHaveCount($count, "Expected $method $namesAsText to return $count classes, but got {$classes->count()}")
+        ->and($oppositeClasses)
+        ->toHaveCount($totalClasses - $count, "Expected opposite $method $namesAsText to return {$oppositeCount} classes, but got {$oppositeClasses->count()}");
+})
+    ->with([
+        // has property
+        [TestModel::class, 'equals', 1],
+        ['TestModel', 'equals', 0],
+        ['*TestModel', 'equals', 1],
+        ['*Test*Model*', 'equals', 1],
+        ['Workbench*Model', 'equals', 3],
+        // For now, interfaces are not supported and should probably get their own queries
+        [AnotherInterface::class, 'equals', 0],
+        ['TestModel', 'contains', 1],
+        ['Workbench*Model', 'contains', 4],
+        ['Test*Model', 'contains', 1],
+        ['Test', 'contains', 4],
+        ['TestModel', 'endsWith', 1],
+        ['Test', 'endsWith', 0],
+        ['Model', 'endsWith', 3],
+        ['Workbench', 'startsWith', 8],
+        ['NOOOOO', 'startsWith', 0],
+    ]);

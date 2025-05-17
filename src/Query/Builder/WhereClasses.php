@@ -81,11 +81,11 @@ trait WhereClasses
         return $this;
     }
 
-    public function whereNameEquals(string|array $text, bool $all = true): self
+    public function whereNameEquals(string|array $text): self
     {
         $this->wheres->push(new WhereClassNameEquals(
             texts: is_array($text) ? $text : [$text],
-            all: $all,
+            all: false
         ));
 
         return $this;

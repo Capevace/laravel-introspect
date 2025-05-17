@@ -4,7 +4,6 @@ namespace Mateffy\Introspect\Query;
 
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
-use JsonException;
 use Mateffy\Introspect\LaravelIntrospect;
 use Mateffy\Introspect\Query\Builder\WhereBuilder;
 use Mateffy\Introspect\Query\Builder\WhereClasses;
@@ -18,7 +17,6 @@ use Roave\BetterReflection\Reflector\DefaultReflector;
 use Roave\BetterReflection\SourceLocator\SourceStubber\ReflectionSourceStubber;
 use Roave\BetterReflection\SourceLocator\Type\AggregateSourceLocator;
 use Roave\BetterReflection\SourceLocator\Type\AutoloadSourceLocator;
-use Roave\BetterReflection\SourceLocator\Type\Composer\Factory\MakeLocatorForComposerJsonAndInstalledJson;
 use Roave\BetterReflection\SourceLocator\Type\DirectoriesSourceLocator;
 use Roave\BetterReflection\SourceLocator\Type\PhpInternalSourceLocator;
 use Spatie\StructureDiscoverer\Discover;

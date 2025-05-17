@@ -235,7 +235,7 @@ $routes = Introspect::routes()
 #### Query by namespace
 ```php
 $services = Introspect::classes()  
-    ->whereNamespace('\App\Services')
+    ->whereName('\App\Services')
     ->get();
 ```
 

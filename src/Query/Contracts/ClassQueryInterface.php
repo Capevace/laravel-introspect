@@ -35,4 +35,14 @@ interface ClassQueryInterface extends Query
      * @param  class-string|class-string[]  $trait
      */
     public function whereDoesntUse(string|array $trait): self;
+
+    public function whereNameContains(string|array $text): self;
+    public function whereNameDoesntContain(string|array $text, bool $all = true): self;
+    public function whereNameStartsWith(string|array $text): self;
+    public function whereNameDoesntStartWith(string|array $text, bool $all = true): self;
+    public function whereNameEndsWith(string|array $text): self;
+    public function whereNameDoesntEndWith(string|array $text, bool $all = true): self;
+    public function whereNameEquals(string|array $text): self;
+    public function whereNameDoesntEqual(string|array $text, bool $all = true): self;
+
 }
