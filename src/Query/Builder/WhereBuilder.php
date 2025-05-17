@@ -24,7 +24,7 @@ trait WhereBuilder
     {
         $subquery = $this->createSubquery();
 
-        if ($returned = $query($subquery)) {
+        if (($returned = $query($subquery)) && $returned instanceof Query) {
             $subquery = $returned;
         }
 
@@ -48,6 +48,6 @@ trait WhereBuilder
      */
     public function and(Closure $query, bool $not = false): static
     {
-        return $this->where($query, not: $not);
+        return $this->where($query, or: false, not: $not);
     }
 }

@@ -2,6 +2,7 @@
 
 namespace Workbench\App\Models;
 
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Workbench\App\Interfaces\AnotherInterface;
 use Workbench\App\Traits\AnotherTrait;
 
@@ -26,5 +27,10 @@ class AnotherModel extends BaseModel implements AnotherInterface
     public function anotherMethod(): void
     {
         // Implementation of AnotherInterface method
+    }
+
+    public function test(): BelongsTo
+    {
+        return $this->belongsTo(TestModel::class);
     }
 }

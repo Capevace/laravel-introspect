@@ -3,6 +3,7 @@
 namespace Mateffy\Introspect\Reflection\ModelReflector;
 
 use DateTimeInterface;
+use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\Collection;
 use Mateffy\Introspect\DTO\ModelProperty;
 use phpDocumentor\Reflection\DocBlock\Tags\Property;
@@ -15,7 +16,8 @@ use phpDocumentor\Reflection\Types\AggregatedType;
 use phpDocumentor\Reflection\Types\Nullable;
 use ReflectionClass;
 use ReflectionException;
-
+use Roave\BetterReflection\Reflection\ReflectionMethod;
+use Roave\BetterReflection\Reflection\ReflectionNamedType;
 use function Livewire\invade;
 
 trait HasProperties
@@ -91,9 +93,29 @@ trait HasProperties
         $dates = $this->instance->getDates();
         $appends = $this->instance->getAppends();
         $visible = $this->instance->getVisible();
-        $relations = $this->instance->getRelations();
         $usesTimestamps = $this->instance->usesTimestamps();
         $defaultAttributes = invade($this->instance)->attributes;
+
+        // Using Roave\BetterReflection in this case appears to be super slow (even slower than just reflecting the class again with the native PHP ReflectionClass)
+        $relations = collect((new \ReflectionClass($this->instance))->getMethods(\ReflectionMethod::IS_PUBLIC))
+            ->filter(function (\ReflectionMethod $relation) {
+                $type = $relation->getReturnType();
+
+                if (!($type instanceof \ReflectionNamedType)) {
+                    return false;
+                }
+
+                if ($type->isBuiltin()) {
+                    return false;
+                }
+
+                $parents = class_parents($type->getName()) ?? [];
+
+                return array_key_exists(Relation::class, $parents);
+            })
+            ->map(fn (\ReflectionMethod $relation) => $relation->getName())
+            ->values()
+            ->all();
 
         return collect([
             ...$fillable,

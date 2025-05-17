@@ -2,6 +2,7 @@
 
 namespace Workbench\App\Models;
 
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Workbench\App\Interfaces\TestInterface;
 use Workbench\App\Traits\TestTrait;
 
@@ -26,5 +27,10 @@ class TestModel extends BaseModel implements TestInterface
     public function testMethod(): void
     {
 
+    }
+
+    public function another2(): BelongsTo
+    {
+        return $this->belongsTo(AnotherModel::class);
     }
 }

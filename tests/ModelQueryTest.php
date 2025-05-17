@@ -1,11 +1,6 @@
 <?php
 
-use Workbench\App\Interfaces\AnotherInterface;
-use Workbench\App\Interfaces\TestInterface;
-use Workbench\App\Models\BaseModel;
-use Workbench\App\Models\TestModel;
-use Workbench\App\Traits\AnotherTrait;
-use Workbench\App\Traits\TestTrait;
+use Mateffy\Introspect\Query\Contracts\ModelQueryInterface;
 
 $totalModels = 4;
 
@@ -13,6 +8,8 @@ it('can query all models', function () use ($totalModels) {
     $classes = introspect()
         ->models()
         ->get();
+
+    file_put_contents('/Users/mat/Downloads/models.txt', json_encode($classes->toArray(), JSON_PRETTY_PRINT));
 
     expect($classes)->toHaveCount($totalModels);
 });
@@ -24,6 +21,9 @@ it('can query by properties', function (string|array $property, string $method, 
     $properties = is_array($property) ? $property : [$property];
     $propertiesAsText = implode(', ', $properties);
 
+    $and_or = ($all ? 'and' : 'or');
+    $or_and = ($all ? 'or' : 'and');
+
     $models = (match ($method) {
         'hasProperty' => $query->whereHasProperties($properties, all: $all),
         'hasFillable' => $query->whereHasFillableProperties($properties, all: $all),
@@ -31,6 +31,7 @@ it('can query by properties', function (string|array $property, string $method, 
         'hasAppended' => $query->whereHasAppendedProperties($properties, all: $all),
         'hasReadable' => $query->whereHasReadableProperties($properties, all: $all),
         'hasWritable' => $query->whereHasWritableProperties($properties, all: $all),
+        'hasRelation' => $query->{($all ? 'and' : 'or')}(fn (ModelQueryInterface $subquery) => collect($properties)->each(fn ($property) => $subquery->whereHasRelationship($property))),
         default => throw new InvalidArgumentException("Invalid method $method"),
     })->get();
 
@@ -41,6 +42,7 @@ it('can query by properties', function (string|array $property, string $method, 
         'hasAppended' => $oppositeQuery->whereDoesntHaveAppendedProperties($properties, all: $all),
         'hasReadable' => $oppositeQuery->whereDoesntHaveReadableProperties($properties, all: $all),
         'hasWritable' => $oppositeQuery->whereDoesntHaveWritableProperties($properties, all: $all),
+        'hasRelation' => $oppositeQuery->{$or_and}(fn (ModelQueryInterface $subquery) => collect($properties)->each(fn ($property) => $subquery->whereDoesntHaveRelationship($property))),
         default => throw new InvalidArgumentException("Invalid method $method"),
     })->get();
 
@@ -97,5 +99,13 @@ it('can query by properties', function (string|array $property, string $method, 
         [['readonly_via_docblock', 'writeonly_via_docblock'], 'hasReadable', 1, false],
         [['readonly_via_docblock', 'writeonly_via_docblock'], 'hasWritable', 0],
         [['readonly_via_docblock', 'writeonly_via_docblock'], 'hasWritable', 1, false],
+
+        // Relationship
+        ['test', 'hasRelation', 1],
+        ['another', 'hasRelation', 3],
+        ['another2', 'hasRelation', 1],
+        [['non_existant', 'another2'], 'hasRelation', 0],
+        [['another', 'another2'], 'hasRelation', 1],
+        [['another', 'another2'], 'hasRelation', 3, false],
     ]);
 

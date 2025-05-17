@@ -8,7 +8,14 @@ use Mateffy\Introspect\Tests\Fixtures\TestModelWithDocblock;
 it('can see all properties with just eloquent', function () {
     $model = introspect()->model(TestModelWithDocblock::class);
 
-    dd($model);
+    expect($model->classpath)->toEqual(TestModelWithDocblock::class);
+    expect($model->description)->toEqual(<<<DESCRIPTION
+    This is the short description in the first line of the model.
+
+    This is a second line of the description.
+    This is another line.
+    DESCRIPTION);
+    expect($model->properties)->toHaveCount(7);
 });
 
 //if (! function_exists('expectPropertyToBe')) {
