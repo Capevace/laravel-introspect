@@ -16,7 +16,7 @@ class WhereRouteUsesMethods implements RouteWhere
     public function __construct(array|Collection $methods, public bool $not = false, public bool $all = true)
     {
         $this->methods = collect($methods)
-            ->map(fn(string $method) => strtoupper($method))
+            ->map(fn (string $method) => strtoupper($method))
             ->unique()
             ->values();
     }
@@ -24,16 +24,16 @@ class WhereRouteUsesMethods implements RouteWhere
     public function filter(Route $value): bool
     {
         $methods = collect($value->methods())
-            ->map(fn(string $method) => strtoupper($method))
+            ->map(fn (string $method) => strtoupper($method))
             ->unique()
             ->values();
 
         if ($this->all) {
             $passes = collect($this->methods)
-                ->every(fn(string $method) => in_array($method, $methods->all()));
+                ->every(fn (string $method) => in_array($method, $methods->all()));
         } else {
             $passes = collect($this->methods)
-                ->some(fn(string $method) => in_array($method, $methods->all()));
+                ->some(fn (string $method) => in_array($method, $methods->all()));
         }
 
         return $this->invert($passes, $this->not);

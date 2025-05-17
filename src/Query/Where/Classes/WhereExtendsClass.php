@@ -10,12 +10,10 @@ class WhereExtendsClass implements ClassWhere
 {
     use NotInverter;
 
-	public function __construct(public string $class, public bool $not = false)
-    {
-    }
+    public function __construct(public string $class, public bool $not = false) {}
 
-	public function filter(ReflectionClass $value): bool
-	{
-		return $this->invert($value->isSubclassOf($this->class), $this->not);
-	}
+    public function filter(ReflectionClass $value): bool
+    {
+        return $this->invert($value->isSubclassOf($this->class), $this->not);
+    }
 }

@@ -7,32 +7,32 @@ use Mateffy\Introspect\Query\Query;
 interface ClassQueryInterface extends Query
 {
     /**
-     * @param class-string $classpath
+     * @param  class-string  $classpath
      */
-	public function whereExtends(string $classpath): self;
+    public function whereExtends(string $classpath): self;
 
     /**
-     * @param class-string $classpath
+     * @param  class-string  $classpath
      */
-	public function whereDoesntExtend(string $classpath): self;
+    public function whereDoesntExtend(string $classpath): self;
 
     /**
-     * @param class-string|class-string[] $interface
+     * @param  class-string|class-string[]  $interface
      */
     public function whereImplements(string|array $interface): self;
 
     /**
-     * @param class-string|class-string[] $interface
+     * @param  class-string|class-string[]  $interface
      */
     public function whereDoesntImplement(string|array $interface): self;
 
     /**
-     * @param class-string|class-string[] $trait
+     * @param  class-string|class-string[]  $trait
      */
     public function whereUses(string|array $trait): self;
 
     /**
-     * @param class-string|class-string[] $trait
+     * @param  class-string|class-string[]  $trait
      */
     public function whereDoesntUse(string|array $trait): self;
 }

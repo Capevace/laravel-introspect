@@ -10,19 +10,17 @@ class WhereUsesView implements ViewWhere
 {
     use NotInverter;
 
-    public function __construct(public string $viewToUse, public bool $not = false, public bool $lax = false)
-    {
-    }
+    public function __construct(public string $viewToUse, public bool $not = false, public bool $lax = false) {}
 
     public function filter(string $value): bool
     {
         $analysis = app(ViewAnalysis::class);
         $included = $analysis->viewIncludesView(
-			containerView: $value,
-			includedView: $this->viewToUse,
-			lax: $this->lax,
-		);
+            containerView: $value,
+            includedView: $this->viewToUse,
+            lax: $this->lax,
+        );
 
-		return $this->invert($included, $this->not);
+        return $this->invert($included, $this->not);
     }
 }

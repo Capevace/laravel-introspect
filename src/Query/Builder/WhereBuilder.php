@@ -10,44 +10,44 @@ use Mateffy\Introspect\Query\Where\NestedWhere;
 
 trait WhereBuilder
 {
-	public bool $or = false;
-
-	/**
-	 * @var Collection<Where>
-	 */
-	protected Collection $wheres;
+    public bool $or = false;
 
     /**
-	 * @param Closure(Query): Query $query
+     * @var Collection<Where>
      */
-	public function where(Closure $query, bool $or = false, bool $not = false): static
-	{
+    protected Collection $wheres;
+
+    /**
+     * @param  Closure(Query): Query  $query
+     */
+    public function where(Closure $query, bool $or = false, bool $not = false): static
+    {
         $subquery = $this->createSubquery();
 
         if ($returned = $query($subquery)) {
             $subquery = $returned;
         }
 
-		$where = new NestedWhere(wheres: $subquery->wheres, or: $or, not: $not);
+        $where = new NestedWhere(wheres: $subquery->wheres, or: $or, not: $not);
 
-		$this->wheres->push($where);
+        $this->wheres->push($where);
 
-		return $this;
-	}
+        return $this;
+    }
 
     /**
-	 * @param Closure(Query): Query $query
+     * @param  Closure(Query): Query  $query
      */
-	public function or(Closure $query, bool $not = false): static
-	{
+    public function or(Closure $query, bool $not = false): static
+    {
         return $this->where($query, or: true, not: $not);
-	}
+    }
 
     /**
-	 * @param Closure(Query): Query $query
+     * @param  Closure(Query): Query  $query
      */
-	public function and(Closure $query, bool $not = false): static
-	{
+    public function and(Closure $query, bool $not = false): static
+    {
         return $this->where($query, not: $not);
     }
 }

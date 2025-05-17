@@ -11,7 +11,7 @@ class WhereRoutePathEquals implements RouteWhere
     use WhereTextEquals;
 
     /**
-     * @param Route $value
+     * @param  Route  $value
      */
     protected function getName($value): string
     {

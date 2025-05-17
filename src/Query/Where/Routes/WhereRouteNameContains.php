@@ -11,7 +11,7 @@ class WhereRouteNameContains implements RouteWhere
     use WhereTextContains;
 
     /**
-     * @param Route $value
+     * @param  Route  $value
      */
     protected function getName($value): string
     {

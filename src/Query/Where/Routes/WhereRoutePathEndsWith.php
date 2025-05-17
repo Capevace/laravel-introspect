@@ -11,7 +11,7 @@ class WhereRoutePathEndsWith implements RouteWhere
     use WhereTextEndsWith;
 
     /**
-     * @param Route $value
+     * @param  Route  $value
      */
     protected function getName($value): string
     {

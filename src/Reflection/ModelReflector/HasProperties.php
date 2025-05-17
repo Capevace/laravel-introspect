@@ -15,6 +15,7 @@ use phpDocumentor\Reflection\Types\AggregatedType;
 use phpDocumentor\Reflection\Types\Nullable;
 use ReflectionClass;
 use ReflectionException;
+
 use function Livewire\invade;
 
 trait HasProperties
@@ -94,13 +95,13 @@ trait HasProperties
             ...$visible,
             ...$relations,
             ...($usesTimestamps
-				? [$this->instance->getCreatedAtColumn(), $this->instance->getUpdatedAtColumn()]
-				: []
-			),
-			...array_keys($defaultAttributes)
+                ? [$this->instance->getCreatedAtColumn(), $this->instance->getUpdatedAtColumn()]
+                : []
+            ),
+            ...array_keys($defaultAttributes),
         ])
             ->unique()
-            ->filter(fn(string $property) => $property !== '*')
+            ->filter(fn (string $property) => $property !== '*')
             ->values()
             ->map(function (string $property) use ($fillable, $hidden, $guarded, $casts, $dates, $appends, $visible, $relations, $defaultAttributes) {
                 $isFillable = in_array($property, $fillable);
@@ -111,8 +112,8 @@ trait HasProperties
                 $isVisible = in_array($property, $visible);
                 $isRelation = in_array($property, $relations);
 
-                $isActuallyFillable = $isFillable && !$isGuarded;
-                $isActuallyHidden = $isHidden && !$isVisible;
+                $isActuallyFillable = $isFillable && ! $isGuarded;
+                $isActuallyHidden = $isHidden && ! $isVisible;
                 $cast = $casts[$property] ?? null;
 
                 $types = collect();
@@ -152,7 +153,7 @@ trait HasProperties
      */
     protected function parsePropertiesFromDocblock(): Collection
     {
-        $factory  = DocBlockFactory::createInstance();
+        $factory = DocBlockFactory::createInstance();
         $reflection = new ReflectionClass($this->model);
         $comment = $reflection->getDocComment();
 
@@ -163,16 +164,16 @@ trait HasProperties
         $docblock = $factory->create($comment);
 
         $properties = collect($docblock->getTagsWithTypeByName('property'))
-			->filter(fn(TagWithType $tag) => $tag instanceof Property)
-			->values();
+            ->filter(fn (TagWithType $tag) => $tag instanceof Property)
+            ->values();
 
         $readOnlyProperties = collect($docblock->getTagsWithTypeByName('property-read'))
-			->filter(fn(TagWithType $tag) => $tag instanceof PropertyRead)
-			->values();
+            ->filter(fn (TagWithType $tag) => $tag instanceof PropertyRead)
+            ->values();
 
         $writeOnlyProperties = collect($docblock->getTagsWithTypeByName('property-write'))
-			->filter(fn(TagWithType $tag) => $tag instanceof PropertyWrite)
-			->values();
+            ->filter(fn (TagWithType $tag) => $tag instanceof PropertyWrite)
+            ->values();
 
         $all = collect();
 
@@ -183,10 +184,10 @@ trait HasProperties
         return $all->unique('name');
     }
 
-	/**
-	 * @param Collection<Property|PropertyRead|PropertyWrite> $properties
-	 * @return Collection<ModelProperty>
-	 */
+    /**
+     * @param  Collection<Property|PropertyRead|PropertyWrite>  $properties
+     * @return Collection<ModelProperty>
+     */
     protected function mapProperties(Collection $properties): Collection
     {
         $all = collect();
@@ -195,49 +196,49 @@ trait HasProperties
             $name = $property->getVariableName();
             $type = $property->getType();
 
-			if ($property instanceof PropertyRead) {
-				$readable = true;
-				$writable = false;
-			} elseif ($property instanceof PropertyWrite) {
-				$readable = false;
-				$writable = true;
-			} else {
-				$readable = true;
-				$writable = true;
-			}
+            if ($property instanceof PropertyRead) {
+                $readable = true;
+                $writable = false;
+            } elseif ($property instanceof PropertyWrite) {
+                $readable = false;
+                $writable = true;
+            } else {
+                $readable = true;
+                $writable = true;
+            }
 
-			$normalizeType = function (Type $type): Collection {
-				if ($type instanceof AggregatedType) {
-					return collect($type->getIterator())
-						->map(fn(Type $subtype) => $subtype->__toString());
-				} else {
-					return collect([$type->__toString()]);
-				}
-			};
+            $normalizeType = function (Type $type): Collection {
+                if ($type instanceof AggregatedType) {
+                    return collect($type->getIterator())
+                        ->map(fn (Type $subtype) => $subtype->__toString());
+                } else {
+                    return collect([$type->__toString()]);
+                }
+            };
 
-			if ($type instanceof Nullable) {
-				$type = $type->getActualType();
-				$types = $normalizeType($type);
-				$types->push('null');
-			} else {
-				$types = $normalizeType($type);
-			}
+            if ($type instanceof Nullable) {
+                $type = $type->getActualType();
+                $types = $normalizeType($type);
+                $types->push('null');
+            } else {
+                $types = $normalizeType($type);
+            }
 
             $all->push(new ModelProperty(
                 name: $name,
-				description: $property->getDescription(),
-				default: null,
-				readable: $readable,
-				writable: $writable,
-				fillable: false,
-				hidden: false,
-				appended: false,
-				relation: false,
-				cast: null,
-				types: $types
-					// Types from the docblock are prefixed with a backslash, whereas ::class does not.
-					// We normalize to the native PHP class name.
-					->map(fn(string $type) => ltrim($type, '\\'))
+                description: $property->getDescription(),
+                default: null,
+                readable: $readable,
+                writable: $writable,
+                fillable: false,
+                hidden: false,
+                appended: false,
+                relation: false,
+                cast: null,
+                types: $types
+                    // Types from the docblock are prefixed with a backslash, whereas ::class does not.
+                    // We normalize to the native PHP class name.
+                    ->map(fn (string $type) => ltrim($type, '\\'))
             ));
         }
 

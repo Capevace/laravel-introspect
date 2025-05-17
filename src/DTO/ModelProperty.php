@@ -18,7 +18,5 @@ readonly class ModelProperty
         public bool $relation,
         public ?string $cast,
         public Collection $types,
-    )
-    {
-    }
+    ) {}
 }

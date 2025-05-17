@@ -12,12 +12,12 @@ class WhereRouteHasParameters implements RouteWhere
     use NotInverter;
 
     /**
-     * @var Collection<string> $parameters
+     * @var Collection<string>
      */
     public Collection $parameters;
 
     /**
-     * @param string[]|Collection<string> $parameters
+     * @param  string[]|Collection<string>  $parameters
      */
     public function __construct(array|Collection $parameters, public bool $not = false, public bool $all = true)
     {

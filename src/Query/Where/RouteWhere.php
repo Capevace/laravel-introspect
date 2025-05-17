@@ -8,7 +8,7 @@ use Mateffy\Introspect\Query\Where;
 interface RouteWhere extends Where
 {
     /**
-     * @param Route $value The name of the route to filter
+     * @param  Route  $value  The name of the route to filter
      */
     public function filter(Route $value): bool;
 }

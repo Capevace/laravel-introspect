@@ -11,7 +11,7 @@ class WhereRoutePathStartsWith implements RouteWhere
     use WhereTextStartsWith;
 
     /**
-     * @param Route $value
+     * @param  Route  $value
      */
     protected function getName($value): string
     {

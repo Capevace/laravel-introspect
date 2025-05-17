@@ -3,9 +3,9 @@
 namespace Mateffy\Introspect\Tests;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Mateffy\Introspect\LaravelIntrospectServiceProvider;
 use Orchestra\Testbench\Concerns\WithWorkbench;
 use Orchestra\Testbench\TestCase as Orchestra;
-use Mateffy\Introspect\LaravelIntrospectServiceProvider;
 
 class TestCase extends Orchestra
 {

@@ -7,22 +7,20 @@ use Illuminate\Routing\Router;
 use Illuminate\Support\Collection;
 use Mateffy\Introspect\Query\Builder\WhereBuilder;
 use Mateffy\Introspect\Query\Builder\WhereRoutes;
-use Mateffy\Introspect\Query\Builder\WhereViews;
 use Mateffy\Introspect\Query\Builder\WithPagination;
 use Mateffy\Introspect\Query\Contracts\PaginationInterface;
 use Mateffy\Introspect\Query\Contracts\QueryPerformerInterface;
 use Mateffy\Introspect\Query\Contracts\RouteQueryInterface;
 
-class RouteQuery implements RouteQueryInterface, PaginationInterface, QueryPerformerInterface
+class RouteQuery implements PaginationInterface, QueryPerformerInterface, RouteQueryInterface
 {
-    use WithPagination;
     use WhereBuilder;
     use WhereRoutes;
+    use WithPagination;
 
     public function __construct(
         protected string $path,
-    )
-    {
+    ) {
         $this->wheres = collect();
     }
 

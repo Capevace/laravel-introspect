@@ -11,6 +11,7 @@ use Mateffy\Introspect\Reflection\ModelReflector;
 
 /**
  * @see LaravelIntrospect
+ *
  * @method static ModelReflector model(string $class)
  * @method static ClassQueryInterface classes()
  * @method static ModelQueryInterface models()

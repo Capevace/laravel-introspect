@@ -10,7 +10,7 @@ class WhereViewNameEndsWith implements ViewWhere
     use WhereTextEndsWith;
 
     /**
-     * @param string $value
+     * @param  string  $value
      */
     protected function getName($value): string
     {

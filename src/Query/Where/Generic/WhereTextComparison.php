@@ -2,7 +2,6 @@
 
 namespace Mateffy\Introspect\Query\Where\Generic;
 
-use Illuminate\Routing\Route;
 use Illuminate\Support\Collection;
 use Mateffy\Introspect\Query\Where\Concerns\NotInverter;
 
@@ -23,10 +22,10 @@ trait WhereTextComparison
 
         if ($this->all) {
             $passes = $this->getStandardizedTexts()
-                ->every(fn(string $text) => $this->compare(needle: $text, haystack: $name));
+                ->every(fn (string $text) => $this->compare(needle: $text, haystack: $name));
         } else {
             $passes = $this->getStandardizedTexts()
-                ->some(fn(string $text) => $this->compare(needle: $text, haystack: $name));
+                ->some(fn (string $text) => $this->compare(needle: $text, haystack: $name));
         }
 
         return $this->invert($passes, $this->not);
@@ -46,12 +45,13 @@ trait WhereTextComparison
     protected function getStandardizedTexts(): Collection
     {
         if ($this->caseless) {
-            return $this->texts->map(fn(?string $text) => $text !== null ? strtolower($text) : null);
+            return $this->texts->map(fn (?string $text) => $text !== null ? strtolower($text) : null);
         }
 
         return $this->texts;
     }
 
     abstract protected function getName($value): ?string;
+
     abstract protected function compare(?string $needle, ?string $haystack): bool;
 }

@@ -7,17 +7,19 @@ use Illuminate\Support\Collection;
 
 interface Query
 {
-	/**
-	 * @param Closure(Query): Query $query
-	 */
-	public function where(Closure $query, bool $or = false): static;
-	public function or(Closure $query, bool $not = false): static;
-	public function and(Closure $query, bool $not = false): static;
+    /**
+     * @param  Closure(Query): Query  $query
+     */
+    public function where(Closure $query, bool $or = false): static;
 
-	public function createSubquery(): self;
+    public function or(Closure $query, bool $not = false): static;
 
-//    public function limit(int $limit): static;
-//    public function offset(int $limit): static;
-//    public function paginate(int $limit, int $offset): LengthAwarePaginator;
-//    public function get(): Collection;
+    public function and(Closure $query, bool $not = false): static;
+
+    public function createSubquery(): self;
+
+    //    public function limit(int $limit): static;
+    //    public function offset(int $limit): static;
+    //    public function paginate(int $limit, int $offset): LengthAwarePaginator;
+    //    public function get(): Collection;
 }

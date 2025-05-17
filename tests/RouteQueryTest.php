@@ -1,8 +1,5 @@
 <?php
 
-use Mateffy\Introspect\Facades\Introspect;
-use Mateffy\Introspect\LaravelIntrospect;
-use Mateffy\Introspect\Query\Contracts\ViewQueryInterface;
 use Workbench\App\Controllers\TestController;
 use Workbench\App\Controllers\UnusedTestController;
 
@@ -54,7 +51,7 @@ it('can query for methods', function (array $methods, int $count) {
         ->whereUsesMethods($methods)
         ->get();
 
-    expect($routes)->toHaveCount($count, message: "Expected {$count} routes for methods: " . implode(', ', $methods));
+    expect($routes)->toHaveCount($count, message: "Expected {$count} routes for methods: ".implode(', ', $methods));
 })
     ->with([
         [['post'], 2],
@@ -71,7 +68,7 @@ it('can query for methods (not)', function (array $methods, int $count) {
         ->whereDoesntUseMethods($methods)
         ->get();
 
-    expect($routes)->toHaveCount($count, message: "Expected {$count} routes for methods: " . implode(', ', $methods));
+    expect($routes)->toHaveCount($count, message: "Expected {$count} routes for methods: ".implode(', ', $methods));
 })
     ->with([
         [['post'], $totalRoutes - 2],
@@ -81,7 +78,6 @@ it('can query for methods (not)', function (array $methods, int $count) {
         [['post', 'delete'], $totalRoutes],
         [['get', 'delete'], $totalRoutes],
     ]);
-
 
 it('can query for controllers and method', function (string $controller, string $method, int $count) {
     $routes = introspect()
@@ -109,7 +105,7 @@ it('can query for parameters', function (array $parameters, int $count) {
         ->whereHasParameters($parameters)
         ->get();
 
-    expect($routes)->toHaveCount($count, message: "Expected {$count} routes for parameters: " . implode(', ', $parameters));
+    expect($routes)->toHaveCount($count, message: "Expected {$count} routes for parameters: ".implode(', ', $parameters));
 })
     ->with([
         [['param1'], 1],
@@ -126,7 +122,7 @@ it('can query for parameters (not)', function (array $parameters, int $count) {
         ->whereDoesntHaveParameters($parameters)
         ->get();
 
-    expect($routes)->toHaveCount($count, message: "Expected {$count} routes for parameters: " . implode(', ', $parameters));
+    expect($routes)->toHaveCount($count, message: "Expected {$count} routes for parameters: ".implode(', ', $parameters));
 })
     ->with([
         [['param1'], $totalRoutes - 1],

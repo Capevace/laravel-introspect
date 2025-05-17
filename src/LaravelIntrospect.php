@@ -19,8 +19,7 @@ class LaravelIntrospect
     public function __construct(
         ?string $path = null,
         protected array $directories = self::DEFAULT_DIRECTORIES,
-    )
-    {
+    ) {
         $this->path = $path ?? app()->basePath();
     }
 
@@ -29,22 +28,22 @@ class LaravelIntrospect
         return Container::getInstance()->make(ModelReflector::class, ['model' => $class]);
     }
 
-    public function classes(): ClassQueryInterface & QueryPerformerInterface
+    public function classes(): ClassQueryInterface&QueryPerformerInterface
     {
         return Container::getInstance()->make(ClassQueryInterface::class, ['path' => $this->path, 'directories' => $this->directories]);
     }
 
-    public function models(): ModelQueryInterface & QueryPerformerInterface
+    public function models(): ModelQueryInterface&QueryPerformerInterface
     {
         return Container::getInstance()->make(ModelQueryInterface::class, ['path' => $this->path, 'directories' => $this->directories]);
     }
 
-    public function views(): ViewQueryInterface & QueryPerformerInterface
+    public function views(): ViewQueryInterface&QueryPerformerInterface
     {
         return Container::getInstance()->make(ViewQueryInterface::class, ['path' => $this->path, 'directories' => $this->directories]);
     }
 
-    public function routes(): RouteQueryInterface & QueryPerformerInterface
+    public function routes(): RouteQueryInterface&QueryPerformerInterface
     {
         return Container::getInstance()->make(RouteQueryInterface::class, ['path' => $this->path]);
     }

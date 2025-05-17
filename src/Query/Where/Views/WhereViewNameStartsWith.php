@@ -10,7 +10,7 @@ class WhereViewNameStartsWith implements ViewWhere
     use WhereTextStartsWith;
 
     /**
-     * @param string $value
+     * @param  string  $value
      */
     protected function getName($value): string
     {

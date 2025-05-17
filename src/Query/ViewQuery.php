@@ -15,11 +15,11 @@ use Mateffy\Introspect\Query\Contracts\ViewQueryInterface;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
 
-class ViewQuery implements ViewQueryInterface, PaginationInterface, QueryPerformerInterface
+class ViewQuery implements PaginationInterface, QueryPerformerInterface, ViewQueryInterface
 {
-    use WithPagination;
     use WhereBuilder;
     use WhereViews;
+    use WithPagination;
 
     public function __construct()
     {
@@ -28,7 +28,7 @@ class ViewQuery implements ViewQueryInterface, PaginationInterface, QueryPerform
 
     public function createSubquery(): self
     {
-        return new ViewQuery();
+        return new ViewQuery;
     }
 
     public function get(): Collection
@@ -41,7 +41,7 @@ class ViewQuery implements ViewQueryInterface, PaginationInterface, QueryPerform
         foreach ($viewFinder->getPaths() as $path) {
             $path = realpath($path);
 
-            if (!$path) {
+            if (! $path) {
                 continue;
             }
 
@@ -52,7 +52,7 @@ class ViewQuery implements ViewQueryInterface, PaginationInterface, QueryPerform
             foreach ($paths as $path) {
                 $path = realpath($path);
 
-                if (!$path) {
+                if (! $path) {
                     continue;
                 }
 
@@ -69,7 +69,7 @@ class ViewQuery implements ViewQueryInterface, PaginationInterface, QueryPerform
         $repositories = collect();
 
         foreach ($allPaths as $path) {
-            $files = (new Finder())
+            $files = (new Finder)
                 ->files()
                 ->name('*.blade.php')
                 ->in($path->path)
@@ -97,7 +97,7 @@ class ViewQuery implements ViewQueryInterface, PaginationInterface, QueryPerform
 
         return $repositories
             ->flatMap(fn (ViewRepository $views) => $views->getViewsAsAbsoluteString())
-            ->filter(fn(string $view) => $this->filterUsingQuery($view))
+            ->filter(fn (string $view) => $this->filterUsingQuery($view))
             ->values()
             ->map(fn (string $view) => $this->transformResult($view));
     }

@@ -8,7 +8,7 @@ use Roave\BetterReflection\Reflection\ReflectionClass;
 interface ClassWhere extends Where
 {
     /**
-     * @param ReflectionClass $value The class to filter
+     * @param  ReflectionClass  $value  The class to filter
      */
-	public function filter(ReflectionClass $value): bool;
+    public function filter(ReflectionClass $value): bool;
 }

@@ -10,7 +10,7 @@ class WhereViewNameEquals implements ViewWhere
     use WhereTextEquals;
 
     /**
-     * @param string $value
+     * @param  string  $value
      */
     protected function getName($value): string
     {

@@ -5,6 +5,7 @@ namespace Mateffy\Introspect\Query\Builder;
 trait WithPagination
 {
     protected ?int $limit = null;
+
     protected ?int $offset = null;
 
     public function limit(int $limit): static

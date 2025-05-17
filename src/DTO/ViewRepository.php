@@ -13,15 +13,13 @@ readonly class ViewRepository
          */
         public Collection $views,
         public ?string $namespace
-    )
-    {
-    }
+    ) {}
 
     public function getViewsAsAbsoluteString(): Collection
     {
         if ($this->namespace) {
             return $this->views
-                ->map(fn($view) => "{$this->namespace}::{$view}");
+                ->map(fn ($view) => "{$this->namespace}::{$view}");
         } else {
             return $this->views;
         }

@@ -17,16 +17,15 @@ if (! function_exists('expectPropertyToBe')) {
         bool $relation,
         ?string $cast,
         array $types,
-    )
-    {
+    ) {
         expect($property->name)->toBe($name, message: "Property name '{$property->name}' does not match '{$name}'");
-        expect($property->readable)->toBe($readable, message: "Property '{$name}' readable does not match " . json_encode($readable));
-        expect($property->writable)->toBe($writable, message: "Property '{$name}' writable does not match " . json_encode($writable));
-        expect($property->fillable)->toBe($fillable, message: "Property '{$name}' fillable does not match " . json_encode($fillable));
-        expect($property->hidden)->toBe($hidden, message: "Property '{$name}' hidden does not match " . json_encode($hidden));
-        expect($property->appended)->toBe($appended, message: "Property '{$name}' appended does not match " . json_encode($appended));
-        expect($property->relation)->toBe($relation, message: "Property '{$name}' relation does not match " . json_encode($relation));
-        expect($property->cast)->toBe($cast, message: "Property '{$name}' cast does not match " . json_encode($cast));
+        expect($property->readable)->toBe($readable, message: "Property '{$name}' readable does not match ".json_encode($readable));
+        expect($property->writable)->toBe($writable, message: "Property '{$name}' writable does not match ".json_encode($writable));
+        expect($property->fillable)->toBe($fillable, message: "Property '{$name}' fillable does not match ".json_encode($fillable));
+        expect($property->hidden)->toBe($hidden, message: "Property '{$name}' hidden does not match ".json_encode($hidden));
+        expect($property->appended)->toBe($appended, message: "Property '{$name}' appended does not match ".json_encode($appended));
+        expect($property->relation)->toBe($relation, message: "Property '{$name}' relation does not match ".json_encode($relation));
+        expect($property->cast)->toBe($cast, message: "Property '{$name}' cast does not match ".json_encode($cast));
 
         // Check that types are EXACTLY the same
         $propertyTypes = collect($property->types)
@@ -36,7 +35,7 @@ if (! function_exists('expectPropertyToBe')) {
             ->sort()
             ->values();
 
-        expect($propertyTypes)->toEqual($expectedTypes, message: "Property '{$name}' types " . json_encode($propertyTypes) . " do not match " . json_encode($expectedTypes));
+        expect($propertyTypes)->toEqual($expectedTypes, message: "Property '{$name}' types ".json_encode($propertyTypes).' do not match '.json_encode($expectedTypes));
     }
 }
 
@@ -253,4 +252,3 @@ it('can see all properties with eloquent and docblock', function () {
         types: [DateTimeInterface::class],
     );
 });
-

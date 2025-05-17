@@ -18,7 +18,7 @@ class ModelQuery extends ClassQuery implements ModelQueryInterface, PaginationIn
 
     public function filterUsingQuery(ReflectionClass $class): bool
     {
-        if (!$class->isSubclassOf(Model::class)) {
+        if (! $class->isSubclassOf(Model::class)) {
             return false;
         }
 

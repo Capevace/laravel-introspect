@@ -13,7 +13,7 @@ trait WhereTextContains
         if (str_contains($haystack, '*')) {
             $pattern = str_replace('*', '.*', preg_quote($haystack, '/'));
 
-            return preg_match('/' . $pattern . '/i', $needle) === 1;
+            return preg_match('/'.$pattern.'/i', $needle) === 1;
         } else {
             return str_contains(haystack: $haystack, needle: $needle);
         }

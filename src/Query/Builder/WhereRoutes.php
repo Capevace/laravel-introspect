@@ -2,16 +2,15 @@
 
 namespace Mateffy\Introspect\Query\Builder;
 
-use Illuminate\Support\Collection;
-use Mateffy\Introspect\Query\Where\Routes\WhereRouteNameEndsWith;
-use Mateffy\Introspect\Query\Where\Routes\WhereRoutePathEquals;
-use Mateffy\Introspect\Query\Where\Routes\WhereRouteUsesController;
 use Mateffy\Introspect\Query\Where\Routes\WhereRouteHasParameters;
 use Mateffy\Introspect\Query\Where\Routes\WhereRouteNameContains;
+use Mateffy\Introspect\Query\Where\Routes\WhereRouteNameEndsWith;
 use Mateffy\Introspect\Query\Where\Routes\WhereRouteNameStartsWith;
 use Mateffy\Introspect\Query\Where\Routes\WhereRoutePathContains;
 use Mateffy\Introspect\Query\Where\Routes\WhereRoutePathEndsWith;
+use Mateffy\Introspect\Query\Where\Routes\WhereRoutePathEquals;
 use Mateffy\Introspect\Query\Where\Routes\WhereRoutePathStartsWith;
+use Mateffy\Introspect\Query\Where\Routes\WhereRouteUsesController;
 use Mateffy\Introspect\Query\Where\Routes\WhereRouteUsesMethods;
 use Mateffy\Introspect\Query\Where\Routes\WhereRouteUsesMiddlewares;
 
@@ -255,10 +254,10 @@ trait WhereRoutes
         return $this;
     }
 
-//    public function whereUsesMethod(string $method): static;
-//    public function whereDoesntUseMethod(string $method): static;
-//    public function whereUsesMethods(array $methods, bool $all = true): static;
-//    public function whereDoesntUseMethods(array $methods, bool $all = true): static;
+    //    public function whereUsesMethod(string $method): static;
+    //    public function whereDoesntUseMethod(string $method): static;
+    //    public function whereUsesMethods(array $methods, bool $all = true): static;
+    //    public function whereDoesntUseMethods(array $methods, bool $all = true): static;
 
     public function whereUsesMethod(string $method): static
     {

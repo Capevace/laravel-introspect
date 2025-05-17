@@ -7,18 +7,17 @@ use Mateffy\Introspect\Query\Builder\WhereBuilder;
 use Mateffy\Introspect\Query\Query;
 use Mateffy\Introspect\Query\Where;
 use Mateffy\Introspect\Query\Where\Concerns\NotInverter;
-use Roave\BetterReflection\Reflection\ReflectionClass;
 
-class NestedWhere implements Where, Query
+class NestedWhere implements Query, Where
 {
     use NotInverter;
-	use WhereBuilder;
+    use WhereBuilder;
 
-	public function __construct(array|Collection $wheres, bool $or = false, public bool $not = false)
-	{
-		$this->or = $or;
-		$this->wheres = $wheres;
-	}
+    public function __construct(array|Collection $wheres, bool $or = false, public bool $not = false)
+    {
+        $this->or = $or;
+        $this->wheres = $wheres;
+    }
 
     public function createSubquery(): Query
     {
@@ -30,7 +29,7 @@ class NestedWhere implements Where, Query
     }
 
     public function filter($value): bool
-	{
+    {
         $results = $this->wheres
             ->map(fn (Where $where) => $where->filter($value));
 
@@ -40,7 +39,7 @@ class NestedWhere implements Where, Query
                 : $results->every(fn (bool $result) => $result),
             not: $this->not
         );
-	}
+    }
 
     public function toArray(): array
     {

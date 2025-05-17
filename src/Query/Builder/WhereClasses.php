@@ -8,12 +8,12 @@ use Mateffy\Introspect\Query\Where\Classes\WhereUsesTraits;
 
 trait WhereClasses
 {
-	public function whereExtends(string $classpath): self
-	{
-		$this->wheres->push(new WhereExtendsClass($classpath));
+    public function whereExtends(string $classpath): self
+    {
+        $this->wheres->push(new WhereExtendsClass($classpath));
 
-		return $this;
-	}
+        return $this;
+    }
 
     public function whereDoesntExtend(string $classpath): self
     {
@@ -22,12 +22,12 @@ trait WhereClasses
         return $this;
     }
 
-	public function whereImplements(string|array $interface): self
-	{
-		$this->wheres->push(new WhereImplementsInterfaces(is_array($interface) ? $interface : [$interface]));
+    public function whereImplements(string|array $interface): self
+    {
+        $this->wheres->push(new WhereImplementsInterfaces(is_array($interface) ? $interface : [$interface]));
 
-		return $this;
-	}
+        return $this;
+    }
 
     public function whereDoesntImplement(string|array $interface): self
     {
@@ -39,12 +39,12 @@ trait WhereClasses
         return $this;
     }
 
-	public function whereUses(string|array $trait): self
-	{
-		$this->wheres->push(new WhereUsesTraits(is_array($trait) ? $trait : [$trait]));
+    public function whereUses(string|array $trait): self
+    {
+        $this->wheres->push(new WhereUsesTraits(is_array($trait) ? $trait : [$trait]));
 
-		return $this;
-	}
+        return $this;
+    }
 
     public function whereDoesntUse(string|array $trait): self
     {

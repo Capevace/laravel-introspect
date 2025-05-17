@@ -6,9 +6,9 @@ use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 use JsonException;
 use Mateffy\Introspect\LaravelIntrospect;
-use Mateffy\Introspect\Query\Builder\WithPagination;
 use Mateffy\Introspect\Query\Builder\WhereBuilder;
 use Mateffy\Introspect\Query\Builder\WhereClasses;
+use Mateffy\Introspect\Query\Builder\WithPagination;
 use Mateffy\Introspect\Query\Contracts\ClassQueryInterface;
 use Mateffy\Introspect\Query\Contracts\PaginationInterface;
 use Mateffy\Introspect\Query\Contracts\QueryPerformerInterface;
@@ -24,15 +24,14 @@ use Spatie\StructureDiscoverer\Discover;
 
 class ClassQuery implements ClassQueryInterface, PaginationInterface, QueryPerformerInterface
 {
-    use WithPagination;
     use WhereBuilder;
     use WhereClasses;
+    use WithPagination;
 
     public function __construct(
         protected string $path,
         protected array $directories = LaravelIntrospect::DEFAULT_DIRECTORIES,
-    )
-    {
+    ) {
         $this->wheres = collect();
     }
 
@@ -65,18 +64,18 @@ class ClassQuery implements ClassQueryInterface, PaginationInterface, QueryPerfo
                 ->all();
         }
 
-        $astLocator = (new BetterReflection())->astLocator();
-        $reflector  = new DefaultReflector(new AggregateSourceLocator([
+        $astLocator = (new BetterReflection)->astLocator();
+        $reflector = new DefaultReflector(new AggregateSourceLocator([
             new DirectoriesSourceLocator($paths, $astLocator),
             (new MakeLocatorForComposerJsonAndInstalledJson)($this->path, $astLocator),
-            new PhpInternalSourceLocator($astLocator, new ReflectionSourceStubber())
+            new PhpInternalSourceLocator($astLocator, new ReflectionSourceStubber),
         ]));
 
         $discover = Discover::in(...$paths);
 
         return collect($discover->classes()->get())
             ->map(fn (string $class) => $reflector->reflectClass($class))
-            ->filter(fn(ReflectionClass $class) => $this->filterUsingQuery($class))
+            ->filter(fn (ReflectionClass $class) => $this->filterUsingQuery($class))
             ->values()
             ->map(fn (ReflectionClass $class) => $this->transformResult($class));
     }
