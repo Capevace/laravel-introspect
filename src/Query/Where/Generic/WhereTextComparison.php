@@ -17,7 +17,7 @@ trait WhereTextComparison
         $this->texts = collect($texts);
     }
 
-    public function filter(Route $value): bool
+    public function filter($value): bool
     {
         $name = $this->getStandardizedValue($value);
 

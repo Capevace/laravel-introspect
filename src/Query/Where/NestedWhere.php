@@ -20,7 +20,16 @@ class NestedWhere implements Where, Query
 		$this->wheres = $wheres;
 	}
 
-	public function filter(ReflectionClass $value): bool
+    public function createSubquery(): Query
+    {
+        return new NestedWhere(
+            wheres: collect(),
+            or: $this->or,
+            not: $this->not
+        );
+    }
+
+    public function filter($value): bool
 	{
         $results = $this->wheres
             ->map(fn (Where $where) => $where->filter($value));

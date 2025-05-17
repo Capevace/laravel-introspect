@@ -2,12 +2,12 @@
 
 namespace Mateffy\Introspect\Query\Where\Views;
 
-use Mateffy\Introspect\Query\Where\Generic\WhereTextEndsWith;
+use Mateffy\Introspect\Query\Where\Generic\WhereTextEquals;
 use Mateffy\Introspect\Query\Where\ViewWhere;
 
-class WhereViewNameEndsWith implements ViewWhere
+class WhereViewNameEquals implements ViewWhere
 {
-    use WhereTextEndsWith;
+    use WhereTextEquals;
 
     /**
      * @param string $value

@@ -2,19 +2,18 @@
 
 namespace Mateffy\Introspect\Query\Where\Views;
 
-use Mateffy\Introspect\Query\Where\Concerns\NotInverter;
+use Mateffy\Introspect\Query\Where\Generic\WhereTextContains;
 use Mateffy\Introspect\Query\Where\ViewWhere;
 
 class WhereViewNameContains implements ViewWhere
 {
-    use NotInverter;
+    use WhereTextContains;
 
-    public function __construct(public string $text, public bool $not = false)
+    /**
+     * @param string $value
+     */
+    protected function getName($value): string
     {
-    }
-
-    public function filter(string $value): bool
-    {
-        return $this->invert(str_contains($value, $this->text), $this->not);
+        return $value;
     }
 }

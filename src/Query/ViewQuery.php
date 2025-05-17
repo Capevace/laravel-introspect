@@ -21,16 +21,14 @@ class ViewQuery implements ViewQueryInterface, PaginationInterface, QueryPerform
     use WhereBuilder;
     use WhereViews;
 
-    public function __construct(
-        protected string $path,
-    )
+    public function __construct()
     {
         $this->wheres = collect();
     }
 
     public function createSubquery(): self
     {
-        return new ViewQuery(path: $this->path);
+        return new ViewQuery();
     }
 
     public function get(): Collection
@@ -77,7 +75,6 @@ class ViewQuery implements ViewQueryInterface, PaginationInterface, QueryPerform
                 ->in($path->path)
                 ->ignoreDotFiles(true)
                 ->ignoreVCS(true)
-                ->ignoreVCSIgnored(true)
                 ->ignoreUnreadableDirs()
                 ->getIterator();
 
@@ -92,7 +89,8 @@ class ViewQuery implements ViewQueryInterface, PaginationInterface, QueryPerform
                             ->toString()
                         )
                         ->values(),
-                    namespace: $path->namespace,
+
+                    namespace: $path->namespace
                 )
             );
         }

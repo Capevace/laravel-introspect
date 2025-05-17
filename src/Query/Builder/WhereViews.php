@@ -7,6 +7,7 @@ use Mateffy\Introspect\Query\Where\Views\WhereUsedByView;
 use Mateffy\Introspect\Query\Where\Views\WhereUsesView;
 use Mateffy\Introspect\Query\Where\Views\WhereViewNameContains;
 use Mateffy\Introspect\Query\Where\Views\WhereViewNameEndsWith;
+use Mateffy\Introspect\Query\Where\Views\WhereViewNameEquals;
 use Mateffy\Introspect\Query\Where\Views\WhereViewNameStartsWith;
 
 trait WhereViews
@@ -20,7 +21,7 @@ trait WhereViews
 
     public function whereDoesntUse(array|string $view): ViewQueryInterface
     {
-        $this->wheres->push(new WhereUsesView($view, not: false));
+        $this->wheres->push(new WhereUsesView($view, not: true));
 
         return $this;
     }
@@ -34,49 +35,91 @@ trait WhereViews
 
     public function whereNotUsedBy(array|string $view): ViewQueryInterface
     {
-        $this->wheres->push(new WhereUsedByView($view, not: false));
+        $this->wheres->push(new WhereUsedByView($view, not: true));
 
         return $this;
     }
 
-    public function whereNameStartsWith(string $text): ViewQueryInterface
+    public function whereNameStartsWith(string|array $text, bool $all = true): ViewQueryInterface
     {
-        $this->wheres->push(new WhereViewNameStartsWith($text));
+        $this->wheres->push(new WhereViewNameStartsWith(
+            texts: is_array($text) ? $text : [$text],
+            all: $all
+        ));
 
         return $this;
     }
 
-    public function whereNameDoesntStartWith(string $text): ViewQueryInterface
+    public function whereNameDoesntStartWith(string|array $text, bool $all = true): ViewQueryInterface
     {
-        $this->wheres->push(new WhereViewNameStartsWith($text, not: true));
+        $this->wheres->push(new WhereViewNameStartsWith(
+            texts: is_array($text) ? $text : [$text],
+            not: true,
+            all: $all
+        ));
 
         return $this;
     }
 
-    public function whereNameEndsWith(string $text): ViewQueryInterface
+    public function whereNameEndsWith(string|array $text, bool $all = true): ViewQueryInterface
     {
-        $this->wheres->push(new WhereViewNameEndsWith($text));
+        $this->wheres->push(new WhereViewNameEndsWith(
+            texts: is_array($text) ? $text : [$text],
+            all: $all
+        ));
 
         return $this;
     }
 
-    public function whereNameDoesntEndWith(string $text): ViewQueryInterface
+    public function whereNameDoesntEndWith(string|array $text, bool $all = true): ViewQueryInterface
     {
-        $this->wheres->push(new WhereViewNameEndsWith($text, not: true));
+        $this->wheres->push(new WhereViewNameEndsWith(
+            texts: is_array($text) ? $text : [$text],
+            not: true,
+            all: $all
+        ));
 
         return $this;
     }
 
-    public function whereNameContains(string $text): ViewQueryInterface
+    public function whereNameContains(string|array $text, bool $all = true): ViewQueryInterface
     {
-        $this->wheres->push(new WhereViewNameContains($text));
+        $this->wheres->push(new WhereViewNameContains(
+            texts: is_array($text) ? $text : [$text],
+            all: $all
+        ));
 
         return $this;
     }
 
-    public function whereNameDoesntContain(string $text): ViewQueryInterface
+    public function whereNameDoesntContain(string|array $text, bool $all = true): ViewQueryInterface
     {
-        $this->wheres->push(new WhereViewNameContains($text, not: true));
+        $this->wheres->push(new WhereViewNameContains(
+            texts: is_array($text) ? $text : [$text],
+            not: true,
+            all: $all
+        ));
+
+        return $this;
+    }
+
+    public function whereNameEquals(string|array $text, bool $all = true): ViewQueryInterface
+    {
+        $this->wheres->push(new WhereViewNameEquals(
+            texts: is_array($text) ? $text : [$text],
+            all: $all
+        ));
+
+        return $this;
+    }
+
+    public function whereNameDoesntEqual(string|array $text, bool $all = true): ViewQueryInterface
+    {
+        $this->wheres->push(new WhereViewNameEquals(
+            texts: is_array($text) ? $text : [$text],
+            not: true,
+            all: $all
+        ));
 
         return $this;
     }
