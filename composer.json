@@ -1,4 +1,4 @@
-\{
+{
     "name": "mateffy/laravel-introspect",
     "description": "Analyze Laravel codebases and find structured information about models, routes and other Laravel-specific things.",
     "keywords": [

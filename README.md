@@ -1,5 +1,7 @@
 <img src="./docs/header@2.webp" width="100%">
 
+![Latest Version](https://img.shields.io/github/v/tag/capevace/laravel-introspect?label=latest+version)
+
 # Introspect for Laravel
 
 A utility library to analyze and pull information from Laravel codebases, querying model, route and more Laravel-specific things directly from your codebase using PHP reflection.  
