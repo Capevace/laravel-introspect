@@ -18,7 +18,6 @@ use ReflectionClass;
 use ReflectionException;
 use Roave\BetterReflection\Reflection\ReflectionMethod;
 use Roave\BetterReflection\Reflection\ReflectionNamedType;
-use function Livewire\invade;
 
 trait HasProperties
 {

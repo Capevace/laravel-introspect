@@ -32,6 +32,15 @@ codebase using a type-safe fluent API.
 
 <br />
 
+### Who is this for?
+
+Are you working on a complex refactoring job and need to find all the places where a specific view is used?
+Are you building devtools or other things which need information about the codebase? Do you need structured schema information of your Eloquent data model?
+
+These are all use cases where you need to introspect your codebase and find out where things are used, how they are used and what they are. This package does exactly that.
+
+<br />
+
 ## Installation
 
 Install the package via composer:
@@ -41,7 +50,7 @@ composer require mateffy/laravel-introspect
 ```  
 
 > [!NOTE]  
-> The package is still in development and not tagged, you will be installing the `dev-main` branch for now.
+> Depending on your use case, it might make sense to install the package as a dev dependency by adding the `--dev` flag to the command.
 
 <br />
 
