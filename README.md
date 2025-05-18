@@ -8,19 +8,15 @@
 
 # Introspect for Laravel
 
-A utility library to analyze and pull information from Laravel codebases, querying model, route and more Laravel-specific things directly from your codebase using PHP reflection.  
-It is targeted for development tools and coding agents for better understanding of the codebase.
-
-## Who is this for?  
-  
-Are you building a devtool or other application that needs to introspect a Laravel codebase?  
-Then this package will make your life a lot easier by providing a fluent API to query models, routes, controllers, views and more.
+A utility package to analyze Laravel codebases, querying views, models, routes, classes and more directly from your
+codebase using a type-safe fluent API.
 
 <br />
 
-- Query views, routes, classes and models with a fluent API
-- Parse properties, relationships + their types and more from Eloquent models
-- (De-)serialize queries to/from JSON (for LLM Tools)
+- 🔍 Query views, routes, classes and models with a fluent API
+- 🔍 Use wildcards (`*`) to match multiple views, routes, classes and models
+- 🪄 Parse properties, relationships + their types and more directly from Eloquent model code
+- 🤖 (De-)serialize queries to/from JSON (perfect for LLM tool calling)
 
 <br />
 
@@ -30,27 +26,27 @@ Then this package will make your life a lot easier by providing a fluent API to 
 | Routes     | name, URI, controller + fn, methods, middleware                        |
 | Classes    | name / namespace, extends parent, implements interfaces, uses traits   |
 | ⤷ Models   | ... relationships, properties, casts, fillable, hidden, read/writeable |
-| ⤷ Commands | ... signature, description                                             |
-  
+| ⤷ Commands | ... signature, description (_coming soon_)                             |
+
 > Name and a few other queries even support wildcard queries (e.g. `components.*.paragraph`)
 
 <br />
 
-## Installation  
-  
-Install the package via composer:  
-  
+## Installation
+
+Install the package via composer:
+
 ```bash  
 composer require mateffy/laravel-introspect  
 ```  
 
 > [!NOTE]  
 > The package is still in development and not tagged, you will be installing the `dev-main` branch for now.
-  
+
 <br />
 
-## Usage  
-  
+## Usage
+
 ```php  
 use Mateffy\Introspect\Facades\Introspect;  
 
@@ -91,14 +87,16 @@ $schema = $detail->schema();
 
 <br />
 
-### Views  
+### Views
 
-You can query all of the views you have in your codebase, including those that are provided by other packages and are namespaced with a `prefix::`.
+You can query all of the views you have in your codebase, including those that are provided by other packages and are
+namespaced with a `prefix::`.
 View queries return a `Collection<string>` of view names.
 
 > All queries support wildcards, e.g. `components.*.button` or `*.button`
 
-#### Query views by view path  
+#### Query views by view path
+
 ```php  
 $views = Introspect::views()  
     // Supports wildcards 
@@ -119,7 +117,8 @@ $views = Introspect::views()
     ->get();
 ```  
 
-#### Query all views that are used by specific views  
+#### Query all views that are used by specific views
+
 ```php  
 $routes = Introspect::views()  
     ->whereUsedBy('pages.welcome')
@@ -134,8 +133,9 @@ $routes = Introspect::views()
     ->whereNotUsedBy('pages.*')
     ->get();
 ```  
-  
-#### Query all views that use a specific view  
+
+#### Query all views that use a specific view
+
 ```php  
 $routes = Introspect::views()  
     ->whereUses('components.button')   
@@ -150,7 +150,7 @@ $routes = Introspect::views()
     ->get();
 ```  
 
-#### Query all views that extend a specific view  
+#### Query all views that extend a specific view
 
 ```php  
 $routes = Introspect::views()  
@@ -170,10 +170,12 @@ $routes = Introspect::views()
 
 ### Routes
 
-Query through all the routes registered in your application (think like `artisan route:list` output), including those registered by packages.
+Query through all the routes registered in your application (think like `artisan route:list` output), including those
+registered by packages.
 The routes are returned as a `Collection<\Illuminate\Routing\Route>`.
 
-#### Query all routes that use a controller  
+#### Query all routes that use a controller
+
 ```php  
 $routes = Introspect::routes()  
     ->whereUsesController(MyController::class)  
@@ -189,7 +191,8 @@ $routes = Introspect::routes()
     ->get();
 ```  
 
-#### Query all routes that use a specific middleware  
+#### Query all routes that use a specific middleware
+
 ```php  
 $routes = Introspect::routes()  
     ->whereUsesMiddleware(MyMiddleware::class)  
@@ -210,7 +213,8 @@ $routes = Introspect::routes()
 ```  
 
 #### Query routes by name
-> "Name equals/contains" queries support wildcards, e.g. `api.products.*` or `*.products.*`  
+
+> "Name equals/contains" queries support wildcards, e.g. `api.products.*` or `*.products.*`
 
 ```php  
 $routes = Introspect::routes()  
@@ -231,7 +235,8 @@ $routes = Introspect::routes()
 ```  
 
 #### Query routes by path
-> "Path equals/contains" queries support wildcards, e.g. `api/products/*` or `*/products/*`  
+
+> "Path equals/contains" queries support wildcards, e.g. `api/products/*` or `*/products/*`
 
 ```php  
 $routes = Introspect::routes()  
@@ -256,6 +261,7 @@ $routes = Introspect::routes()
 ### Generic Classes
 
 #### Query by namespace
+
 ```php
 $services = Introspect::classes()  
     ->whereName('\App\Services')
@@ -263,6 +269,7 @@ $services = Introspect::classes()
 ```
 
 #### Query by parent
+
 ```php
 $blocks = Introspect::classes()  
     ->whereExtends(CMS\Block::class)
@@ -270,6 +277,7 @@ $blocks = Introspect::classes()
 ```
 
 #### Query by interface
+
 ```php
 $blocks = Introspect::classes()  
     ->whereImplements(CMS\Block::class)
@@ -277,6 +285,7 @@ $blocks = Introspect::classes()
 ```
 
 #### Query by trait
+
 ```php
 $blocks = Introspect::classes()  
     ->whereUses(MyTrait::class)
@@ -286,7 +295,9 @@ $blocks = Introspect::classes()
 <br />
 
 ### Models
+
 #### Query by relationship
+
 ```php  
 $models = Introspect::models()  
     ->whereRelationship('users')  
@@ -391,7 +402,8 @@ $routes = Introspect::routes()
 ```
 
 Some methods support multiple parameters, e.g. `whereUsesMiddlewares([...])` or `whereUsesProperties([...])`.
-These methods have an `all` parameter that defaults to `true`. If set to `false`, the values are checked with `OR` logic too, matching on any of the values.
+These methods have an `all` parameter that defaults to `true`. If set to `false`, the values are checked with `OR` logic
+too, matching on any of the values.
 
 ```php
 $routes = Introspect::routes()  
@@ -402,7 +414,9 @@ $routes = Introspect::routes()
 <br />
 
 ### Limit the results and paginate just like using Eloquent queries
-_Actual Laravel pagination (`->paginate(...)`) is not yet supported, but you can use `limit` and `offset` to get the results you want._  
+
+_Actual Laravel pagination (`->paginate(...)`) is not yet supported, but you can use `limit` and `offset` to get the
+results you want._
 
 ```php  
 $models = Introspect::models()  
@@ -412,12 +426,12 @@ $models = Introspect::models()
 ```  
 
 <br />
-  
-### Build Queries with JSON instead of code  
-  
+
+### Build Queries with JSON instead of code
+
 All the type-safe queries above can also be expressed in JSON format.  
-This is to make it easier for LLMs to be able to more flexibly query the codebase.  
-  
+This is to make it easier for LLMs to be able to more flexibly query the codebase.
+
 ```php  
 $query = <<<JSON
 {
@@ -437,12 +451,13 @@ JSON;
 
 $models = Introspect::query($query)->get();
 ```  
-  
+
 <br />
 
 ## DTO Examples
 
 #### Get all model properties
+
 ```php
 $model = Introspect::model(User::class);
 $properties = $models->properties();
@@ -451,13 +466,14 @@ $casts = $models->casts();
 ```
 
 #### Get Model as JSON schema
+
 ```php
 $schema = Introspect::model(User::class)->schema();
 // -> ['type' => 'object',...]
 ```
 
 <br />
-  
-## License  
-  
+
+## License
+
 The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
