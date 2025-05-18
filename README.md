@@ -305,87 +305,111 @@ $blocks = Introspect::classes()
 
 ### Models
 
-#### Query by relationship
+Query Eloquent models based on their properties, attributes (fillable, hidden, appended, readable, writable), and relationship existence. Model queries return a `Collection` of model class strings (e.g., `App\Models\User::class`).
 
-```php  
-$models = Introspect::models()  
-    ->whereRelationship('users')  
-    ->get();
+#### Query by Property Existence
 
-$models = Introspect::models()  
-    ->whereRelationship('users', HasMany::class)  
-    ->get();
+Filter models based on whether they possess specific properties.
 
-$models = Introspect::models()  
-    ->whereRelatesTo(User::class)  
+```php
+$models = Introspect::models()
+    ->whereHasProperty('created_at')
     ->get();
 
-$models = Introspect::models()  
-    ->whereRelatedTo(User::class)  
+// Also available: whereDoesntHaveProperty, whereHasProperties, whereDoesntHaveProperties
+// Example with multiple properties (any):
+$models = Introspect::models()
+    ->whereHasProperties(['first_name', 'last_name'], all: false)
+    ->get();
+```
+
+#### Query by Fillable Properties
+
+Filter models based on their `$fillable` attributes.
+
+```php
+$models = Introspect::models()
+    ->whereHasFillable('title')
     ->get();
 
-$models = Introspect::models()  
-    ->whereHasProperty('name')  
+// Also available: whereDoesntHaveFillable, whereHasFillableProperties, etc.
+$models = Introspect::models()
+    ->whereHasFillableProperties(['name', 'description']) // all: true by default
+    ->get();
+```
+
+#### Query by Hidden Properties
+
+Filter models based on their `$hidden` attributes.
+
+```php
+$models = Introspect::models()
+    ->whereHasHidden('password')
     ->get();
 
-$models = Introspect::models()  
-    ->whereDoesntHaveProperty('name')  
+// Also available: whereDoesntHaveHidden, whereHasHiddenProperties, etc.
+$models = Introspect::models()
+    ->whereDoesntHaveHiddenProperties(['name', 'email'], all: false) // neither name nor email are hidden
+    ->get();
+```
+
+#### Query by Appended Properties
+
+Filter models based on their `$appends` attributes (accessors).
+
+```php
+$models = Introspect::models()
+    ->whereHasAppended('full_name')
     ->get();
 
-$models = Introspect::models()  
-    ->whereSetter('name')  
+// Also available: whereDoesntHaveAppended, whereHasAppendedProperties, etc.
+$models = Introspect::models()
+    ->whereHasAppendedProperties(['is_active', 'resource_type'])
     ->get();
-    
-$models = Introspect::models()  
-    ->whereFillable('name')  
+```
+
+#### Query by Readable Properties
+
+Filter models based on "readable" properties (public getters, public properties, or attributes).
+
+```php
+$models = Introspect::models()
+    ->whereHasReadable('name')
     ->get();
 
-$models = Introspect::models()  
-    ->whereNotFillable('name')  
+// Also available: whereDoesntHaveReadable, whereHasReadableProperties, etc.
+$models = Introspect::models()
+    ->whereHasReadableProperties(['id', 'email'])
+    ->get();
+```
+
+#### Query by Writable Properties
+
+Filter models based on "writable" properties (public setters or public properties).
+
+```php
+$models = Introspect::models()
+    ->whereHasWritable('status')
     ->get();
 
-$models = Introspect::models()  
-    ->whereGuarded('name')  
+// Also available: whereDoesntHaveWritable, whereHasWritableProperties, etc.
+$models = Introspect::models()
+    ->whereHasWritableProperties(['name', 'settings'])
+    ->get();
+```
+
+#### Query by Relationship Existence
+
+Filter models based on the existence of specific relationship methods.
+*Note: This currently checks for method presence, not relationship type or related model details.*
+
+```php
+$models = Introspect::models()
+    ->whereHasRelationship('user')
     ->get();
 
-$models = Introspect::models()  
-    ->whereNotGuarded('name')  
-    ->get();
-
-$models = Introspect::models()  
-    ->whereGetter('name')  
-    ->get();
-
-$models = Introspect::models()  
-    ->whereSetter('name')  
-    ->get();
-    
-$models = Introspect::models()  
-    ->whereSetter('name')  
-    ->get();
-
-$models = Introspect::models()  
-    ->whereHidden('name')  
-    ->get();
-
-$models = Introspect::models()  
-    ->whereNotHidden('name')  
-    ->get();
-    
-$models = Introspect::models()  
-    ->whereCast('name')
-    ->get();
-
-$models = Introspect::models()  
-    ->whereDoesntCast('name')
-    ->get();
-    
-$models = Introspect::models()  
-    ->whereCast('is_admin', 'boolean')
-    ->get();
-    
-$models = Introspect::models()  
-    ->whereCastWith(CustomCoordinateCast::class)
+$models = Introspect::models()
+    ->whereDoesntHaveRelationship('logs')
     ->get();
 ```
 
