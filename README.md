@@ -1,6 +1,7 @@
 <img src="./docs/header@2.webp" width="100%">
 
 ![Latest Version](https://img.shields.io/github/v/tag/capevace/laravel-introspect?label=latest+version)
+![Test Status](https://img.shields.io/github/actions/workflow/status/capevace/laravel-introspect/run-tests.yml)
 
 # Introspect for Laravel
 

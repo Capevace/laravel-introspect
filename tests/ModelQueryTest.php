@@ -9,8 +9,6 @@ it('can query all models', function () use ($totalModels) {
         ->models()
         ->get();
 
-    file_put_contents('/Users/mat/Downloads/models.txt', json_encode($classes->toArray(), JSON_PRETTY_PRINT));
-
     expect($classes)->toHaveCount($totalModels);
 });
 
