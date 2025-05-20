@@ -1,6 +1,6 @@
 <?php
 
-namespace Mateffy\Introspect;
+namespace Mateffy\Introspect\Support;
 
 class RegexHelper
 {

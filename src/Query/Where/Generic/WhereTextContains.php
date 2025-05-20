@@ -2,7 +2,7 @@
 
 namespace Mateffy\Introspect\Query\Where\Generic;
 
-use Mateffy\Introspect\RegexHelper;
+use Mateffy\Introspect\Support\RegexHelper;
 
 trait WhereTextContains
 {

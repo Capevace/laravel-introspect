@@ -18,6 +18,7 @@
     "require": {
         "php": "^8.2",
         "illuminate/contracts": "^10.0||^11.0||^12.0",
+        "laravel/prompts": "^0.3.5",
         "phpdocumentor/reflection-docblock": "^5.6",
         "roave/better-reflection": "^6.57",
         "spatie/invade": "^2.1",

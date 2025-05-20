@@ -3,7 +3,7 @@
 namespace Mateffy\Introspect\View;
 
 use Illuminate\View\FileViewFinder;
-use Mateffy\Introspect\RegexHelper;
+use Mateffy\Introspect\Support\RegexHelper;
 
 class ViewAnalysis
 {
