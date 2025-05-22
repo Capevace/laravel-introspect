@@ -9,7 +9,7 @@ it('can see all properties with just eloquent', function () {
     $model = introspect()->model(TestModelWithDocblock::class);
 
     expect($model->classpath)->toEqual(TestModelWithDocblock::class);
-    expect($model->description)->toEqual(<<<DESCRIPTION
+    expect($model->description)->toEqual(<<<'DESCRIPTION'
     This is the short description in the first line of the model.
 
     This is a second line of the description.
@@ -18,7 +18,7 @@ it('can see all properties with just eloquent', function () {
     expect($model->properties)->toHaveCount(7);
 });
 
-//if (! function_exists('expectPropertyToBe')) {
+// if (! function_exists('expectPropertyToBe')) {
 //    function expectPropertyToBe(
 //        ModelProperty $property,
 //        string $name,
@@ -50,9 +50,9 @@ it('can see all properties with just eloquent', function () {
 //
 //        expect($propertyTypes)->toEqual($expectedTypes, message: "Property '{$name}' types ".json_encode($propertyTypes).' do not match '.json_encode($expectedTypes));
 //    }
-//}
+// }
 //
-//it('can see all properties with just eloquent', function () {
+// it('can see all properties with just eloquent', function () {
 //    $model = app(LaravelIntrospect::class)->model(TestModel::class);
 //    $properties = $model->properties();
 //
@@ -157,9 +157,9 @@ it('can see all properties with just eloquent', function () {
 //        cast: DateTimeInterface::class,
 //        types: [DateTimeInterface::class],
 //    );
-//});
+// });
 //
-//it('can see all properties with eloquent and docblock', function () {
+// it('can see all properties with eloquent and docblock', function () {
 //    $model = app(LaravelIntrospect::class)->model(TestModelWithDocblock::class);
 //    $properties = $model->properties();
 //
@@ -264,4 +264,4 @@ it('can see all properties with just eloquent', function () {
 //        cast: DateTimeInterface::class,
 //        types: [DateTimeInterface::class],
 //    );
-//});
+// });

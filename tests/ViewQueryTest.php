@@ -1,7 +1,5 @@
 <?php
 
-use Mateffy\Introspect\Query\Contracts\ViewQueryInterface;
-
 $totalViews = 32;
 
 it('can query all views', function () use ($totalViews) {
@@ -73,7 +71,6 @@ it('can query by name', function (string $text, string $method, int $count) use 
         ['*wtf.test*', 'contains', 8],
         ['*wtf*test*', 'contains', 8],
 
-
         // equals
         ['non-existant', 'equals', 0],
         ['workbench::components.wtf.*', 'equals', 8],
@@ -130,5 +127,3 @@ it('can query by name', function (string $text, string $method, int $count) use 
         ['*wtf.test', 'uses', 2],
         ['*wtf.test8', 'uses', 1],
     ]);
-
-

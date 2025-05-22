@@ -4,7 +4,6 @@ namespace Mateffy\Introspect\Query\Where;
 
 use Mateffy\Introspect\Query\Where;
 use Mateffy\Introspect\Reflection\ModelReflector;
-use Roave\BetterReflection\Reflection\ReflectionClass;
 
 interface ModelWhere extends Where
 {

@@ -22,7 +22,7 @@ class LaravelIntrospectServiceProvider extends PackageServiceProvider
             ->hasConfigFile()
             ->hasCommands([
                 Commands\IntrospectInteractiveCommand::class,
-                Commands\IntrospectViewsCommand::class
+                Commands\IntrospectViewsCommand::class,
             ])
             ->hasViews();
     }

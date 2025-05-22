@@ -21,7 +21,7 @@ class AnotherModel extends BaseModel implements AnotherInterface
 
     protected $appends = [
         'appended_only',
-        'name'
+        'name',
     ];
 
     public function anotherMethod(): void

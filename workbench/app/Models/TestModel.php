@@ -16,17 +16,12 @@ class TestModel extends BaseModel implements TestInterface
     use TestTrait;
 
     protected $guarded = [
-        'only_via_guarded'
+        'only_via_guarded',
     ];
 
     public function test_method(): void
     {
         // Implementation of TestInterface method
-    }
-
-    public function testMethod(): void
-    {
-
     }
 
     public function another2(): BelongsTo

@@ -14,7 +14,7 @@ class WhereHasProperties implements ModelWhere
     use NotInverter;
 
     /**
-     * @var Collection<string> $properties
+     * @var Collection<string>
      */
     public Collection $properties;
 
@@ -48,7 +48,7 @@ class WhereHasProperties implements ModelWhere
     }
 
     /**
-     * @param Collection<string, ModelProperty> $properties
+     * @param  Collection<string, ModelProperty>  $properties
      */
     public function check(ModelReflector $reflector, Collection $properties, string $property): bool
     {

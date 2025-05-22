@@ -5,7 +5,6 @@ namespace Mateffy\Introspect\Reflection;
 use Illuminate\Container\Container;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Collection;
 use InvalidArgumentException;
 use Mateffy\Introspect\Reflection\ModelReflector\HasProperties;
 use ReflectionException;
@@ -89,7 +88,7 @@ class ModelReflector implements Arrayable
     {
         $description = str($this->reflection->getDocComment() ?? '')
             ->explode("\n")
-            ->filter(fn (string $line) => !str($line)
+            ->filter(fn (string $line) => ! str($line)
                 ->trim()
                 ->startsWith(['/**', '*/', '*@', '* @', '@'])
             )

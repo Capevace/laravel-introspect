@@ -5,11 +5,10 @@ namespace Mateffy\Introspect\Commands;
 use Illuminate\Console\Command;
 use Mateffy\Introspect\Facades\Introspect;
 use Mateffy\Introspect\Query\Contracts\QueryPerformerInterface;
-use Mateffy\Introspect\Query\Query;
 use Mateffy\Introspect\Support\ControllableConsoleOutput;
 use Mateffy\Introspect\Support\PaginatableConsoleOutput;
+
 use function Laravel\Prompts\confirm;
-use function Laravel\Prompts\form;
 use function Laravel\Prompts\select;
 use function Laravel\Prompts\text;
 
@@ -18,14 +17,14 @@ class IntrospectInteractiveCommand extends Command
     use ControllableConsoleOutput;
     use PaginatableConsoleOutput;
 
-	protected $signature = 'introspect';
+    protected $signature = 'introspect';
 
-	protected $description = 'Introspect your application interactively';
+    protected $description = 'Introspect your application interactively';
 
-	public function handle(): void
-	{
+    public function handle(): void
+    {
         $type = select(
-            label:'What do you want to introspect?',
+            label: 'What do you want to introspect?',
             options: [
                 'Views',
                 'Routes',
@@ -43,7 +42,7 @@ class IntrospectInteractiveCommand extends Command
                 'Name' => $view,
             ],
         });
-	}
+    }
 
     protected function buildViewQuery(): QueryPerformerInterface
     {
@@ -59,7 +58,7 @@ class IntrospectInteractiveCommand extends Command
                     'Not Used By',
                     'Uses',
                     'Doesn\'t Use',
-                    'Skip'
+                    'Skip',
                 ],
                 default: 'Name Equals',
                 required: true
@@ -104,7 +103,7 @@ class IntrospectInteractiveCommand extends Command
                     break;
             }
 
-            if (!$continue) {
+            if (! $continue) {
                 break;
             }
         }

@@ -9,7 +9,7 @@ use Mateffy\Introspect\Reflection\ModelReflector;
 class WhereHasReadableProperties extends WhereHasProperties
 {
     /**
-     * @param Collection<string, ModelProperty> $properties
+     * @param  Collection<string, ModelProperty>  $properties
      */
     public function check(ModelReflector $reflector, Collection $properties, string $property): bool
     {

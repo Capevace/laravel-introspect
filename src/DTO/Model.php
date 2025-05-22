@@ -18,9 +18,7 @@ readonly class Model
         public Collection $properties,
 
         // TODO: Add relationships, migrations, factories etc.
-    )
-    {
-    }
+    ) {}
 
     public function schema(bool $supportsMultipleTypes = true): array
     {
@@ -36,7 +34,7 @@ readonly class Model
             'properties' => $this->properties
                 // Filter out properties that have non-normal types
                 ->filter(fn (ModelProperty $property) => $property->types
-                    ->filter(fn (string $type) => !$isNormalType($type))
+                    ->filter(fn (string $type) => ! $isNormalType($type))
                     ->isEmpty()
                 )
                 ->map(fn (ModelProperty $property) => array_filter([
@@ -48,12 +46,12 @@ readonly class Model
                             ->first(),
                     'description' => $property->description,
                     'default' => $property->default,
-                    'readOnly' => ($property->readable && !$property->writable) ? true : null,
-                    'writeOnly' => ($property->writable && !$property->readable) ? true : null,
+                    'readOnly' => ($property->readable && ! $property->writable) ? true : null,
+                    'writeOnly' => ($property->writable && ! $property->readable) ? true : null,
                 ]))
                 ->toArray(),
             'required' => $this->properties
-                ->filter(fn (ModelProperty $property) => $property->types->isEmpty() || !$property->types->contains('null'))
+                ->filter(fn (ModelProperty $property) => $property->types->isEmpty() || ! $property->types->contains('null'))
                 ->keys()
                 ->toArray(),
         ]);

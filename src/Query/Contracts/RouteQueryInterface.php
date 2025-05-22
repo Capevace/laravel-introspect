@@ -8,7 +8,9 @@ interface RouteQueryInterface extends Query
 {
     // Route names
     public function whereNameEquals(string $name): static;
+
     public function whereNameDoesntEqual(string $name): static;
+
     public function whereNameStartsWith(string $text): static;
 
     public function whereNameDoesntStartWith(string $text): static;

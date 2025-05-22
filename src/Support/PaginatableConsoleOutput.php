@@ -2,10 +2,7 @@
 
 namespace Mateffy\Introspect\Support;
 
-use Closure;
-use Illuminate\Support\Collection;
 use Mateffy\Introspect\Query\Contracts\PaginationInterface;
-use function Laravel\Prompts\warning;
 
 trait PaginatableConsoleOutput
 {

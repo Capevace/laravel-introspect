@@ -4,5 +4,5 @@ namespace Workbench\App\Interfaces;
 
 interface TestInterface
 {
-    public function testMethod(): void;
+    public function test_method(): void;
 }

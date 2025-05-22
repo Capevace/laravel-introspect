@@ -12,12 +12,12 @@ class IntrospectViewsCommand extends Command
     use ControllableConsoleOutput;
     use PaginatableConsoleOutput;
 
-	protected $signature = 'introspect:views {--name=} {--name-not=} {--used-by=} {--not-used-by=} {--uses=} {--doesnt-use=} {--format=text} {--count} {--limit=} {--offset=}';
+    protected $signature = 'introspect:views {--name=} {--name-not=} {--used-by=} {--not-used-by=} {--uses=} {--doesnt-use=} {--format=text} {--count} {--limit=} {--offset=}';
 
-	protected $description = 'Query the views in your application';
+    protected $description = 'Query the views in your application';
 
-	public function handle(): void
-	{
+    public function handle(): void
+    {
         $name = $this->option('name');
         $nameNot = $this->option('name-not');
         $usedBy = $this->option('used-by');
@@ -54,5 +54,5 @@ class IntrospectViewsCommand extends Command
         $this->outputResults($this->paginate($query)->get(), fn (string $view) => [
             'Name' => $view,
         ]);
-	}
+    }
 }

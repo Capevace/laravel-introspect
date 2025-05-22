@@ -11,8 +11,7 @@ readonly class Route
         public ?string $controller,
         public ?string $action,
         public array $middlewares,
-    ) {
-    }
+    ) {}
 
     public static function fromRoute(\Illuminate\Routing\Route $route): self
     {

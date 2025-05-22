@@ -44,12 +44,12 @@ class ViewAnalysis
 
         $debug = $includedView === 'workbench::*.wtf.test*';
 
-//        if ($debug) {
-//            dd($hasComponentAtStart, $hasComponentAfterNamespace, $startsWithWildcard, $startsWithWildcardAfterNamespace, str_contains($includedView, '::'));
-//        }
+        //        if ($debug) {
+        //            dd($hasComponentAtStart, $hasComponentAfterNamespace, $startsWithWildcard, $startsWithWildcardAfterNamespace, str_contains($includedView, '::'));
+        //        }
 
         // If the view DOESNT contain ^components. or ::components., we set $includedViewWithoutComponentPrefix to null, in order to not "fake" the component prefix.
-        if (!$hasComponentAtStart && !$hasComponentAfterNamespace && !$startsWithWildcard && !$startsWithWildcardAfterNamespace) {
+        if (! $hasComponentAtStart && ! $hasComponentAfterNamespace && ! $startsWithWildcard && ! $startsWithWildcardAfterNamespace) {
             $includedViewWithoutComponentPrefix = null;
         } elseif (str_contains($includedView, '::')) {
             $before = str($includedView)->before('::');
@@ -61,7 +61,7 @@ class ViewAnalysis
 
                 // For components to work, we need to remove the period from the wildcard so that the @component and <x- things work correctly
                 if (str_starts_with($filtered, '*.')) {
-                    $filtered = "*" . str($filtered)->after('*.');
+                    $filtered = '*'.str($filtered)->after('*.');
                 }
             }
 

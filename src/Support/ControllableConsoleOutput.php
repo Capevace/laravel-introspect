@@ -4,6 +4,7 @@ namespace Mateffy\Introspect\Support;
 
 use Closure;
 use Illuminate\Support\Collection;
+
 use function Laravel\Prompts\table;
 use function Laravel\Prompts\warning;
 
@@ -19,12 +20,13 @@ trait ControllableConsoleOutput
 
         if ($count) {
             $this->line($results->count());
+
             return;
         }
 
         if ($format === 'json') {
             $this->line(json_encode($results, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE));
-        } else if ($results->isNotEmpty()) {
+        } elseif ($results->isNotEmpty()) {
             $formatted = $results->map($row);
             $headers = $headers ?? array_keys($formatted->first());
 

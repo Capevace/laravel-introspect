@@ -9,6 +9,6 @@ uses(TestCase::class)->in(__DIR__);
 if (! function_exists('introspect')) {
     function introspect(): LaravelIntrospect
     {
-        return Introspect::codebase(realpath(__DIR__ . '/..'), ['workbench/app', 'workbench/resources/views']);
+        return Introspect::codebase(realpath(__DIR__.'/..'), ['workbench/app', 'workbench/resources/views']);
     }
 }

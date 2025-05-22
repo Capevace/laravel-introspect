@@ -21,7 +21,7 @@ it('can offset models', function () use ($totalModels) {
     expect($models->count())->toEqual($totalModels - 2);
 });
 
-it('can limit models', function () use ($totalModels) {
+it('can limit models', function () {
     $models = introspect()
         ->models()
         ->limit(2)
@@ -164,4 +164,3 @@ it('can query use class methods', function (string|array $name, string $method, 
         ['*Authenticatable', 'whereImplements', 1],
         ['*Auth*', 'whereImplements', 1],
     ]);
-

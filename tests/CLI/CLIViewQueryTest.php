@@ -1,6 +1,5 @@
 <?php
 
-use Laravel\Prompts\Prompt;
 use Mateffy\Introspect\Query\Contracts\ViewQueryInterface;
 
 $totalViews = 32;
@@ -19,7 +18,7 @@ it('can get the count', function () use ($totalViews) {
         ->assertSuccessful();
 });
 
-it('can query views with filters', function (array $params, Closure $query, int $count) use ($totalViews) {
+it('can query views with filters', function (array $params, Closure $query, int $count) {
     $views = $query(introspect()->views())->get();
 
     expect($views->count())->toBe($count);
@@ -33,11 +32,11 @@ it('can query views with filters', function (array $params, Closure $query, int 
         ->assertSuccessful();
 })
     ->with([
-//        [
-//            [],
-//            fn (ViewQueryInterface $query) => $query,
-//            47,
-//        ],
+        //        [
+        //            [],
+        //            fn (ViewQueryInterface $query) => $query,
+        //            47,
+        //        ],
         [
             ['--name' => '*test*'],
             fn (ViewQueryInterface $query) => $query
@@ -72,7 +71,7 @@ it('can query views with filters', function (array $params, Closure $query, int 
             ['--used-by' => 'workbench::*test*'],
             fn (ViewQueryInterface $query) => $query
                 ->whereUsedBy('workbench::*test*'),
-            8
+            8,
         ],
         [
             ['--uses' => 'workbench::*test*'],

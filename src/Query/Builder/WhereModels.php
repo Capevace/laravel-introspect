@@ -39,7 +39,6 @@ trait WhereModels
         return $this;
     }
 
-
     //
     // Fillable properties
     //
@@ -203,19 +202,19 @@ trait WhereModels
     // like relationship type and related model.
     // For now, only relationship presence is checked.
 
-//    public function whereHasRelationships(array $relationships, bool $all = true): static
-//    {
-//        $this->wheres->push(new WhereHasProperties($relationships, all: $all));
-//
-//        return $this;
-//    }
-//
-//    public function whereDoesntHaveRelationships(array $relationships, bool $all = true): static
-//    {
-//        $this->wheres->push(new WhereHasProperties($relationships, not: true, all: $all));
-//
-//        return $this;
-//    }
+    //    public function whereHasRelationships(array $relationships, bool $all = true): static
+    //    {
+    //        $this->wheres->push(new WhereHasProperties($relationships, all: $all));
+    //
+    //        return $this;
+    //    }
+    //
+    //    public function whereDoesntHaveRelationships(array $relationships, bool $all = true): static
+    //    {
+    //        $this->wheres->push(new WhereHasProperties($relationships, not: true, all: $all));
+    //
+    //        return $this;
+    //    }
 
     // TODO: add things like
 }

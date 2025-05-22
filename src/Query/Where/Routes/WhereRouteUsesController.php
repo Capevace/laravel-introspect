@@ -10,7 +10,8 @@ class WhereRouteUsesController implements RouteWhere
 {
     use NotInverter;
 
-    public function __construct(public string $controller, public ?string $method = null, public bool $not = false) {
+    public function __construct(public string $controller, public ?string $method = null, public bool $not = false)
+    {
         // Normally we can only match the action method using the class name when using single action controllers,
         // but for better readability we allow the user to specify __invoke as the method name.
         if ($this->method === '__invoke') {

@@ -17,8 +17,6 @@ use phpDocumentor\Reflection\Types\AggregatedType;
 use phpDocumentor\Reflection\Types\Nullable;
 use ReflectionClass;
 use ReflectionException;
-use Roave\BetterReflection\Reflection\ReflectionMethod;
-use Roave\BetterReflection\Reflection\ReflectionNamedType;
 
 trait HasProperties
 {
@@ -31,6 +29,7 @@ trait HasProperties
 
     /**
      * @return Collection<string, ModelProperty>
+     *
      * @throws ReflectionException
      */
     public function properties(bool $ignoreCache = false): Collection
@@ -101,7 +100,7 @@ trait HasProperties
             ->filter(function (\ReflectionMethod $relation) {
                 $type = $relation->getReturnType();
 
-                if (!($type instanceof \ReflectionNamedType)) {
+                if (! ($type instanceof \ReflectionNamedType)) {
                     return false;
                 }
 
@@ -175,7 +174,7 @@ trait HasProperties
                         types: $types
                             ->unique()
                             ->values()
-                    )
+                    ),
                 ];
             });
     }

@@ -26,7 +26,7 @@ it('can offset classes', function () use ($totalClasses) {
     expect($classes->count())->toEqual($totalClasses - 2);
 });
 
-it('can limit classes', function () use ($totalClasses) {
+it('can limit classes', function () {
     $classes = introspect()
         ->classes()
         ->limit(2)
