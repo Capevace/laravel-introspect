@@ -4,6 +4,7 @@ namespace Mateffy\Introspect\Query\Where\Classes;
 
 use Mateffy\Introspect\Query\Where\Generic\WhereTextEndsWith;
 use Mateffy\Introspect\Query\Where\RouteWhere;
+use Mateffy\Introspect\Reflection\ModelReflector;
 use ReflectionClass;
 
 class WhereClassNameEndsWith implements RouteWhere
@@ -11,7 +12,7 @@ class WhereClassNameEndsWith implements RouteWhere
     use WhereTextEndsWith;
 
     /**
-     * @param  ReflectionClass  $value
+     * @param  ReflectionClass|ModelReflector  $value
      */
     protected function getName($value): ?string
     {

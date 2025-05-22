@@ -5,6 +5,8 @@ namespace Mateffy\Introspect\Query\Where\Classes;
 use Illuminate\Support\Collection;
 use Mateffy\Introspect\Query\Where\ClassWhere;
 use Mateffy\Introspect\Query\Where\Concerns\NotInverter;
+use Mateffy\Introspect\Reflection\ModelReflector;
+use Mateffy\Introspect\Support\RegexHelper;
 use Roave\BetterReflection\Reflection\ReflectionClass;
 
 class WhereUsesTraits implements ClassWhere
@@ -21,14 +23,16 @@ class WhereUsesTraits implements ClassWhere
         $this->traits = collect($traits);
     }
 
-    public function filter(ReflectionClass $value): bool
+    public function filter(ReflectionClass|ModelReflector $value): bool
     {
+        $traits = class_uses_recursive($value->getName());
+
         if ($this->all) {
             $passes = collect($this->traits)
-                ->every(fn (string $trait) => in_array($trait, class_uses($value->getName())));
+                ->every(fn (string $trait) => RegexHelper::matches($trait, $traits));
         } else {
             $passes = collect($this->traits)
-                ->some(fn (string $trait) => in_array($trait, class_uses($value->getName())));
+                ->some(fn (string $trait) => RegexHelper::matches($trait, $traits));
         }
 
         return $this->invert($passes, $this->not);

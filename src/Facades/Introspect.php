@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Facade;
 use Mateffy\Introspect\LaravelIntrospect;
 use Mateffy\Introspect\Query\Contracts\ClassQueryInterface;
 use Mateffy\Introspect\Query\Contracts\ModelQueryInterface;
+use Mateffy\Introspect\Query\Contracts\RouteQueryInterface;
 use Mateffy\Introspect\Query\Contracts\ViewQueryInterface;
 use Mateffy\Introspect\Reflection\ModelReflector;
 
@@ -16,6 +17,7 @@ use Mateffy\Introspect\Reflection\ModelReflector;
  * @method static ClassQueryInterface classes()
  * @method static ModelQueryInterface models()
  * @method static ViewQueryInterface views()
+ * @method static RouteQueryInterface routes()
  */
 class Introspect extends Facade
 {

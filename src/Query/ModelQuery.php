@@ -8,6 +8,7 @@ use Mateffy\Introspect\Query\Builder\WhereModels;
 use Mateffy\Introspect\Query\Contracts\ModelQueryInterface;
 use Mateffy\Introspect\Query\Contracts\PaginationInterface;
 use Mateffy\Introspect\Query\Contracts\QueryPerformerInterface;
+use Mateffy\Introspect\Reflection\ClassReflector;
 use Mateffy\Introspect\Reflection\ModelReflector;
 use Roave\BetterReflection\Reflection\ReflectionClass;
 
@@ -27,7 +28,7 @@ class ModelQuery extends ClassQuery implements ModelQueryInterface, PaginationIn
 
         return $this->getAllClasses($paths, $reflector)
             ->map(fn (string $class) => $reflector->reflectClass($class))
-            ->filter(fn (ReflectionClass $class) => $class->isSubclassOf(Model::class))
+            ->filter(fn (ReflectionClass $class) => ClassReflector::extends($class->getName(), Model::class))
             ->map(fn (ReflectionClass $class) => ModelReflector::makeFromReflection($class))
             ->filter(fn (ModelReflector $class) => $this->wheres->every(fn (Where $where) => $where->filter($class)))
             ->values()

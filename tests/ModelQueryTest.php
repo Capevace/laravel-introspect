@@ -125,3 +125,43 @@ it('can query by properties', function (string|array $property, string $method, 
         [['another', 'another2'], 'hasRelation', 3, false],
     ]);
 
+it('can query use class methods', function (string|array $name, string $method, int $count, bool $all = true) use ($totalModels) {
+    $query = introspect()->models();
+    $oppositeQuery = introspect()->models();
+
+    $names = is_array($name) ? $name : [$name];
+    $namesAsText = implode(', ', $names);
+
+    $models = (match ($method) {
+        'whereImplements' => $query->whereImplements($names),
+        'whereUses' => $query->whereUses($names),
+        'whereExtends' => $query->whereExtends($names),
+        default => throw new InvalidArgumentException("Invalid method $method"),
+    })->get();
+
+    $oppositeModels = (match ($method) {
+        'whereImplements' => $oppositeQuery->whereDoesntImplement($names, all: $all),
+        'whereUses' => $oppositeQuery->whereDoesntUse($names, all: $all),
+        'whereExtends' => $oppositeQuery->whereDoesntExtend($names, all: $all),
+        default => throw new InvalidArgumentException("Invalid method $method"),
+    })->get();
+
+    $oppositeCount = $totalModels - $count;
+
+    expect($models)
+        ->toHaveCount($count, "Expected $method $namesAsText to return $count models, but got {$models->count()}")
+        ->and($oppositeModels)
+        ->toHaveCount($totalModels - $count, "Expected opposite $method $namesAsText to return {$oppositeCount} models, but got {$oppositeModels->count()}");
+})
+    ->with([
+        [\Illuminate\Notifications\Notifiable::class, 'whereUses', 1],
+        ['*Notifiable', 'whereUses', 1],
+        [\Illuminate\Foundation\Auth\User::class, 'whereExtends', 1],
+        ['*User', 'whereExtends', 1],
+        [\Illuminate\Database\Eloquent\Model::class, 'whereExtends', 4],
+        ['*Model', 'whereExtends', 4],
+        [\Illuminate\Contracts\Auth\Authenticatable::class, 'whereImplements', 1],
+        ['*Authenticatable', 'whereImplements', 1],
+        ['*Auth*', 'whereImplements', 1],
+    ]);
+

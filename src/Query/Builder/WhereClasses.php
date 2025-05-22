@@ -12,49 +12,58 @@ use Mateffy\Introspect\Query\Where\Classes\WhereUsesTraits;
 
 trait WhereClasses
 {
-    public function whereExtends(string $classpath): self
+    public function whereExtends(string|array $classpath, bool $all = true): self
     {
-        $this->wheres->push(new WhereExtendsClass($classpath));
-
-        return $this;
-    }
-
-    public function whereDoesntExtend(string $classpath): self
-    {
-        $this->wheres->push(new WhereExtendsClass($classpath, not: true));
-
-        return $this;
-    }
-
-    public function whereImplements(string|array $interface): self
-    {
-        $this->wheres->push(new WhereImplementsInterfaces(is_array($interface) ? $interface : [$interface]));
-
-        return $this;
-    }
-
-    public function whereDoesntImplement(string|array $interface): self
-    {
-        $this->wheres->push(new WhereImplementsInterfaces(
-            is_array($interface) ? $interface : [$interface],
-            not: true
+        $this->wheres->push(new WhereExtendsClass(
+            is_array($classpath) ? $classpath : [$classpath],
+            all: $all
         ));
 
         return $this;
     }
 
-    public function whereUses(string|array $trait): self
+    public function whereDoesntExtend(string|array $classpath, bool $all = true): self
     {
-        $this->wheres->push(new WhereUsesTraits(is_array($trait) ? $trait : [$trait]));
+        $this->wheres->push(new WhereExtendsClass(
+            is_array($classpath) ? $classpath : [$classpath],
+            not: true,
+            all: $all
+        ));
 
         return $this;
     }
 
-    public function whereDoesntUse(string|array $trait): self
+    public function whereImplements(string|array $interface, bool $all = true): self
+    {
+        $this->wheres->push(new WhereImplementsInterfaces(is_array($interface) ? $interface : [$interface], all: $all));
+
+        return $this;
+    }
+
+    public function whereDoesntImplement(string|array $interface, bool $all = true): self
+    {
+        $this->wheres->push(new WhereImplementsInterfaces(
+            is_array($interface) ? $interface : [$interface],
+            not: true,
+            all: $all
+        ));
+
+        return $this;
+    }
+
+    public function whereUses(string|array $trait, bool $all = true): self
+    {
+        $this->wheres->push(new WhereUsesTraits(is_array($trait) ? $trait : [$trait], all: $all));
+
+        return $this;
+    }
+
+    public function whereDoesntUse(string|array $trait, bool $all = true): self
     {
         $this->wheres->push(new WhereUsesTraits(
             is_array($trait) ? $trait : [$trait],
-            not: true
+            not: true,
+            all: $all
         ));
 
         return $this;

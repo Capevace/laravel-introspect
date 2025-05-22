@@ -3,7 +3,7 @@
 use Laravel\Prompts\Prompt;
 use Mateffy\Introspect\Query\Contracts\ViewQueryInterface;
 
-$totalViews = 47;
+$totalViews = 32;
 
 it('can query views with JSON output', function () {
     $views = introspect()->views()->get();

@@ -21,6 +21,11 @@ class ModelReflector implements Arrayable
         public readonly ReflectionClass $reflection
     ) {}
 
+    public function getName(): string
+    {
+        return $this->model;
+    }
+
     /**
      * @throws ReflectionException
      */
@@ -99,7 +104,11 @@ class ModelReflector implements Arrayable
             $description = null;
         }
 
-        $description = trim($description);
+        $description = trim($description ?? '');
+
+        if (empty($description)) {
+            $description = null;
+        }
 
         return new \Mateffy\Introspect\DTO\Model(
             classpath: $this->model,

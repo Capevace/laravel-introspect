@@ -196,7 +196,7 @@ it('can query with complex conditions', function () {
     expect($classes->first())->toBe(TestModel::class);
 });
 
-it('can query by name', function (string|array $name, string $method, int $count, bool $all = true) use ($totalClasses) {
+it('can query with filters', function (string|array $name, string $method, int $count, bool $all = true) use ($totalClasses) {
     $query = introspect()->classes();
     $oppositeQuery = introspect()->classes();
 
@@ -208,6 +208,9 @@ it('can query by name', function (string|array $name, string $method, int $count
         'contains' => $query->whereNameContains($names),
         'startsWith' => $query->whereNameStartsWith($names),
         'endsWith' => $query->whereNameEndsWith($names),
+        'whereImplements' => $query->whereImplements($names),
+        'whereUses' => $query->whereUses($names),
+        'whereExtends' => $query->whereExtends($names),
         default => throw new InvalidArgumentException("Invalid method $method"),
     })->get();
 
@@ -216,6 +219,9 @@ it('can query by name', function (string|array $name, string $method, int $count
         'contains' => $oppositeQuery->whereNameDoesntContain($names, all: $all),
         'startsWith' => $oppositeQuery->whereNameDoesntStartWith($names, all: $all),
         'endsWith' => $oppositeQuery->whereNameDoesntEndWith($names, all: $all),
+        'whereImplements' => $oppositeQuery->whereDoesntImplement($names, all: $all),
+        'whereUses' => $oppositeQuery->whereDoesntUse($names, all: $all),
+        'whereExtends' => $oppositeQuery->whereDoesntExtend($names, all: $all),
         default => throw new InvalidArgumentException("Invalid method $method"),
     })->get();
 
@@ -244,4 +250,13 @@ it('can query by name', function (string|array $name, string $method, int $count
         ['Model', 'endsWith', 3],
         ['Workbench', 'startsWith', 8],
         ['NOOOOO', 'startsWith', 0],
+        [\Illuminate\Notifications\Notifiable::class, 'whereUses', 1],
+        ['*Notifiable', 'whereUses', 1],
+        [\Illuminate\Foundation\Auth\User::class, 'whereExtends', 1],
+        ['*User', 'whereExtends', 1],
+        [\Illuminate\Database\Eloquent\Model::class, 'whereExtends', 4],
+        ['*Model', 'whereExtends', 4],
+        [\Illuminate\Contracts\Auth\Authenticatable::class, 'whereImplements', 1],
+        ['*Authenticatable', 'whereImplements', 1],
+        ['*Auth*', 'whereImplements', 1],
     ]);

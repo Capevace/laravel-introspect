@@ -2,6 +2,13 @@
 
 All notable changes to `mateffy/laravel-introspect` will be documented in this file.
 
+## 1.1.0 (_2025-05-22_)
+- added missing methods to `RouteQueryInterface`
+- added `Introspect::routes()` method to Facade DocBlock
+- added `artisan introspect:views` command for querying from the command line
+- improved model query performance
+- class methods `whereImplements()`, `whereExtends()` and `whereUses()` now accept multiple values and work correctly with models
+
 ## 1.0.2 (_2025-05-18_)
 - removed Livewire dependency (for `invade()` function) in favor of `spatie/invade`
 

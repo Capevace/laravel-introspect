@@ -108,7 +108,11 @@ trait HasProperties
                     return false;
                 }
 
-                $parents = class_parents($type->getName()) ?? [];
+                $parents = class_parents($type->getName());
+
+                if (!is_array($parents)) {
+                    return false;
+                }
 
                 return array_key_exists(Relation::class, $parents);
             })
