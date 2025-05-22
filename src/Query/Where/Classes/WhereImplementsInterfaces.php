@@ -5,6 +5,7 @@ namespace Mateffy\Introspect\Query\Where\Classes;
 use Illuminate\Support\Collection;
 use Mateffy\Introspect\Query\Where\ClassWhere;
 use Mateffy\Introspect\Query\Where\Concerns\NotInverter;
+use Mateffy\Introspect\Reflection\ClassReflector;
 use Mateffy\Introspect\Reflection\ModelReflector;
 use Mateffy\Introspect\Support\RegexHelper;
 use Roave\BetterReflection\Reflection\ReflectionClass;
@@ -29,10 +30,7 @@ class WhereImplementsInterfaces implements ClassWhere
         // taking around 4s per class (I think because it reflects the interfaces too, but idk).
         // Using class_implements is much faster, taking around 0.1s per class.
 
-        $interfaces = collect(class_implements($value->getName()))
-            ->map(fn (string $interface) => ltrim($interface, '\\'))
-            ->values()
-            ->all();
+        $interfaces = ClassReflector::getNestedInterfaces($value->getName());
 
         if ($this->all) {
             $passes = collect($this->interfaces)

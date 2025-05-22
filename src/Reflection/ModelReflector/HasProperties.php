@@ -6,6 +6,7 @@ use DateTimeInterface;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\Collection;
 use Mateffy\Introspect\DTO\ModelProperty;
+use Mateffy\Introspect\Reflection\ClassReflector;
 use phpDocumentor\Reflection\DocBlock\Tags\Property;
 use phpDocumentor\Reflection\DocBlock\Tags\PropertyRead;
 use phpDocumentor\Reflection\DocBlock\Tags\PropertyWrite;
@@ -108,13 +109,7 @@ trait HasProperties
                     return false;
                 }
 
-                $parents = class_parents($type->getName());
-
-                if (!is_array($parents)) {
-                    return false;
-                }
-
-                return array_key_exists(Relation::class, $parents);
+                return ClassReflector::extends($type->getName(), Relation::class);
             })
             ->map(fn (\ReflectionMethod $relation) => $relation->getName())
             ->values()

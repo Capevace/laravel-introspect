@@ -5,6 +5,7 @@ namespace Mateffy\Introspect\Query\Where\Classes;
 use Illuminate\Support\Collection;
 use Mateffy\Introspect\Query\Where\ClassWhere;
 use Mateffy\Introspect\Query\Where\Concerns\NotInverter;
+use Mateffy\Introspect\Reflection\ClassReflector;
 use Mateffy\Introspect\Reflection\ModelReflector;
 use Mateffy\Introspect\Support\RegexHelper;
 use Roave\BetterReflection\Reflection\ReflectionClass;
@@ -25,7 +26,7 @@ class WhereUsesTraits implements ClassWhere
 
     public function filter(ReflectionClass|ModelReflector $value): bool
     {
-        $traits = class_uses_recursive($value->getName());
+        $traits = ClassReflector::getNestedTraits($value->getName());
 
         if ($this->all) {
             $passes = collect($this->traits)
