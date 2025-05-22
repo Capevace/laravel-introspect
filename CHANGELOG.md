@@ -2,6 +2,9 @@
 
 All notable changes to `mateffy/laravel-introspect` will be documented in this file.
 
+## 1.1.1 (_2025-05-22_)
+- fixed `class_*` methods failing if classes don't exist (spatie pro packages for example)
+
 ## 1.1.0 (_2025-05-22_)
 - added missing methods to `RouteQueryInterface`
 - added `Introspect::routes()` method to Facade DocBlock
