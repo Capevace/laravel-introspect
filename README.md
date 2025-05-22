@@ -460,33 +460,6 @@ $models = Introspect::models()
 
 <br />
 
-### Build Queries with JSON instead of code
-
-All the type-safe queries above can also be expressed in JSON format.  
-This is to make it easier for LLMs to be able to more flexibly query the codebase.
-
-```php  
-$query = <<<JSON
-{
-    "type": "models",
-    "query": {
-        "filters": [
-            {
-                "type": "whereTrait",
-                "value": "MyTrait::class"
-            }
-        ],
-        "limit": 10,
-        "offset": 20
-    }
-}
-JSON;
-
-$models = Introspect::query($query)->get();
-```  
-
-<br />
-
 ## DTO Examples
 
 #### Get all model properties
@@ -494,8 +467,6 @@ $models = Introspect::query($query)->get();
 ```php
 $model = Introspect::model(User::class);
 $properties = $models->properties();
-$casts = $models->casts();
-$casts = $models->casts();
 ```
 
 #### Get Model as JSON schema
