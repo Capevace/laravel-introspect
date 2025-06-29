@@ -23,8 +23,7 @@ class LaravelIntrospectServiceProvider extends PackageServiceProvider
             ->hasCommands([
                 Commands\IntrospectInteractiveCommand::class,
                 Commands\IntrospectViewsCommand::class,
-            ])
-            ->hasViews();
+            ]);
     }
 
     public function register()
