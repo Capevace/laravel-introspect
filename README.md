@@ -2,7 +2,6 @@
 
 ![Development Tests Status](https://img.shields.io/github/actions/workflow/status/capevace/laravel-introspect/run-tests.yml?label=dev%20tests)
 ![Latest Version](https://img.shields.io/github/v/tag/capevace/laravel-introspect?label=latest+version)
-![GitHub Release Date](https://img.shields.io/github/release-date/capevace/laravel-introspect?label=last%20release&cacheSeconds=0)
 
 [//]: # (![Packagist Downloads]&#40;https://img.shields.io/packagist/dt/mateffy/laravel-introspect&#41;)
 
