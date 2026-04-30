@@ -2,6 +2,9 @@
 
 All notable changes to `mateffy/laravel-introspect` will be documented in this file.
 
+## 1.1.3 (_2026-04-30_)
+- Laravel 13 support
+
 ## 1.1.2 (_2025-06-29_)
 - fixed `view:cache` failing due to missing view folder by removing `->hasViews()` from the service provider
 
