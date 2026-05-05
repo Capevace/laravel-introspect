@@ -21,8 +21,14 @@ class LaravelIntrospectServiceProvider extends PackageServiceProvider
             ->name('laravel-introspect')
             ->hasConfigFile()
             ->hasCommands([
-                Commands\IntrospectInteractiveCommand::class,
                 Commands\IntrospectViewsCommand::class,
+                Commands\IntrospectRoutesCommand::class,
+                Commands\IntrospectClassesCommand::class,
+                Commands\IntrospectModelsCommand::class,
+                Commands\IntrospectModelCommand::class,
+                Commands\IntrospectSchemaCommand::class,
+                Commands\IntrospectBaselineCommand::class,
+                Commands\IntrospectDiffCommand::class,
             ]);
     }
 

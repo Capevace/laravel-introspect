@@ -4,7 +4,7 @@ use Workbench\App\Controllers\SingleActionTestController;
 use Workbench\App\Controllers\TestController;
 use Workbench\App\Controllers\UnusedTestController;
 
-$totalRoutes = 4;
+$totalRoutes = 5;
 
 it('can query all routes', function () use ($totalRoutes) {
     $routes = introspect()

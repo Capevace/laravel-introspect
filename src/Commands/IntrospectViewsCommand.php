@@ -2,57 +2,98 @@
 
 namespace Mateffy\Introspect\Commands;
 
-use Illuminate\Console\Command;
 use Mateffy\Introspect\Facades\Introspect;
-use Mateffy\Introspect\Support\ControllableConsoleOutput;
-use Mateffy\Introspect\Support\PaginatableConsoleOutput;
+use Mateffy\Introspect\Query\Contracts\ViewQueryInterface;
 
-class IntrospectViewsCommand extends Command
+class IntrospectViewsCommand extends IntrospectCommand
 {
-    use ControllableConsoleOutput;
-    use PaginatableConsoleOutput;
+    protected $signature = 'introspect:views
+                            {--name= : Filter by view name (supports wildcards)}
+                            {--name-not= : Exclude views matching pattern}
+                            {--name-starts= : Name starts with text}
+                            {--name-ends= : Name ends with text}
+                            {--name-contains= : Name contains text}
+                            {--uses= : Views that use a specific view}
+                            {--doesnt-use= : Views that don\'t use a specific view}
+                            {--used-by= : Views used by a specific view}
+                            {--not-used-by= : Views not used by a specific view}
+                            {--format=json : Output format (json, jsonl, table, csv, raw)}
+                            {--compact : Minified JSON output}
+                            {--limit= : Maximum results}
+                            {--offset= : Skip N results}
+                            {--count : Return count only}
+                            {--fields= : Comma-separated fields}
+                            {--query= : Query DSL expression}
+                            {--query-file= : Path to query file}';
 
-    protected $signature = 'introspect:views {--name=} {--name-not=} {--used-by=} {--not-used-by=} {--uses=} {--doesnt-use=} {--format=text} {--count} {--limit=} {--offset=}';
+    protected $description = 'Query views in your application';
 
-    protected $description = 'Query the views in your application';
-
-    public function handle(): void
+    public function handle(): int
     {
-        $name = $this->option('name');
-        $nameNot = $this->option('name-not');
-        $usedBy = $this->option('used-by');
-        $notUsedBy = $this->option('not-used-by');
-        $uses = $this->option('uses');
-        $doesntUse = $this->option('doesnt-use');
+        try {
+            $query = Introspect::views();
 
-        $query = Introspect::views();
+            // Apply simple filter options
+            $this->applySimpleFilters($query);
 
-        if ($name) {
-            $query->whereNameEquals($name);
+            // Apply common options (pagination, DSL query)
+            $this->configureQuery($query);
+
+            // Execute and output
+            $results = $query->get();
+
+            $this->outputResults($results, ['name']);
+
+            return self::SUCCESS;
+        } catch (\Exception $e) {
+            $this->error($e->getMessage());
+
+            return self::FAILURE;
+        }
+    }
+
+    protected function applySimpleFilters(ViewQueryInterface $query): void
+    {
+        if ($this->option('name')) {
+            $query->whereNameEquals($this->option('name'));
         }
 
-        if ($nameNot) {
-            $query->whereNameDoesntEqual($nameNot);
+        if ($this->option('name-not')) {
+            $query->whereNameDoesntEqual($this->option('name-not'));
         }
 
-        if ($usedBy) {
-            $query->whereUsedBy($usedBy);
+        if ($this->option('name-starts')) {
+            $query->whereNameStartsWith($this->option('name-starts'));
         }
 
-        if ($notUsedBy) {
-            $query->whereNotUsedBy($notUsedBy);
+        if ($this->option('name-ends')) {
+            $query->whereNameEndsWith($this->option('name-ends'));
         }
 
-        if ($uses) {
-            $query->whereUses($uses);
+        if ($this->option('name-contains')) {
+            $query->whereNameContains($this->option('name-contains'));
         }
 
-        if ($doesntUse) {
-            $query->whereDoesntUse($doesntUse);
+        if ($this->option('uses')) {
+            $query->whereUses($this->option('uses'));
         }
 
-        $this->outputResults($this->paginate($query)->get(), fn (string $view) => [
-            'Name' => $view,
-        ]);
+        if ($this->option('doesnt-use')) {
+            $query->whereDoesntUse($this->option('doesnt-use'));
+        }
+
+        if ($this->option('used-by')) {
+            $query->whereUsedBy($this->option('used-by'));
+        }
+
+        if ($this->option('not-used-by')) {
+            $query->whereNotUsedBy($this->option('not-used-by'));
+        }
+    }
+
+    protected function applyDslQuery($query, string $dsl): void
+    {
+        $ast = $this->queryParser->parseQuery($dsl);
+        $this->queryBuilder->applyToViews($query, $ast);
     }
 }

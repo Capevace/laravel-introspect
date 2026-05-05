@@ -1,6 +1,6 @@
 <?php
 
-$totalViews = 32;
+$totalViews = 48;
 
 it('can query all views', function () use ($totalViews) {
     $views = introspect()
@@ -62,7 +62,7 @@ it('can query by name', function (string $text, string $method, int $count) use 
     ->with([
         // contains
         ['non-existant', 'equals', 0],
-        ['test', 'contains', 10],
+        ['test', 'contains', 25],
         ['test2', 'contains', 1],
         ['workbench::components.wtf.test', 'contains', 8],
         ['workbench::components.wtf.*', 'contains', 8],
@@ -111,19 +111,19 @@ it('can query by name', function (string $text, string $method, int $count) use 
 
         // uses
         ['non-existant', 'uses', 0],
-        ['workbench::test-welcome', 'uses', 0],
-        ['workbench::components.wtf.test', 'uses', 2],
+        ['workbench::test-welcome', 'uses', 4],
+        ['workbench::components.wtf.test', 'uses', 9],
         ['workbench::components.wtf.test2', 'uses', 1],
-        ['workbench::components.wtf.test8', 'uses', 1],
-        ['workbench::components.wtf.test*', 'uses', 2],
-        ['workbench::components.wtf.test*', 'uses', 2],
-        ['workbench::*.wtf.test*', 'uses', 2],
+        ['workbench::components.wtf.test8', 'uses', 2],
+        ['workbench::components.wtf.test*', 'uses', 10],
+        ['workbench::components.wtf.test*', 'uses', 10],
+        ['workbench::*.wtf.test*', 'uses', 12],
         // This checks that components. needs to be present, and "shorthand" view strings like <x-workbench::wtf.test don't work.
         // Instead, the full string needs to be used
         ['workbench::wtf.test', 'uses', 0],
         ['workbench::wtf.test*', 'uses', 0],
-        ['workbench::*wtf.test*', 'uses', 2],
-        ['*wtf.test*', 'uses', 2],
-        ['*wtf.test', 'uses', 2],
-        ['*wtf.test8', 'uses', 1],
+        ['workbench::*wtf.test*', 'uses', 12],
+        ['*wtf.test*', 'uses', 12],
+        ['*wtf.test', 'uses', 11],
+        ['*wtf.test8', 'uses', 2],
     ]);

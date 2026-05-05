@@ -29,7 +29,7 @@ readonly class Model
 
         return array_filter([
             'type' => 'object',
-            'title' => basename($this->classpath),
+            'title' => class_basename($this->classpath),
             'description' => $this->description,
             'properties' => $this->properties
                 // Filter out properties that have non-normal types
