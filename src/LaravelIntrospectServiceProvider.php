@@ -6,9 +6,11 @@ use Mateffy\Introspect\Query\ClassQuery;
 use Mateffy\Introspect\Query\Contracts\ClassQueryInterface;
 use Mateffy\Introspect\Query\Contracts\ModelQueryInterface;
 use Mateffy\Introspect\Query\Contracts\RouteQueryInterface;
+use Mateffy\Introspect\Query\Contracts\TestQueryInterface;
 use Mateffy\Introspect\Query\Contracts\ViewQueryInterface;
 use Mateffy\Introspect\Query\ModelQuery;
 use Mateffy\Introspect\Query\RouteQuery;
+use Mateffy\Introspect\Query\TestQuery;
 use Mateffy\Introspect\Query\ViewQuery;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
@@ -29,6 +31,7 @@ class LaravelIntrospectServiceProvider extends PackageServiceProvider
                 Commands\IntrospectSchemaCommand::class,
                 Commands\IntrospectBaselineCommand::class,
                 Commands\IntrospectDiffCommand::class,
+                Commands\IntrospectTestsCommand::class,
             ]);
     }
 
@@ -40,5 +43,6 @@ class LaravelIntrospectServiceProvider extends PackageServiceProvider
         $this->app->bind(ClassQueryInterface::class, ClassQuery::class);
         $this->app->bind(ViewQueryInterface::class, ViewQuery::class);
         $this->app->bind(RouteQueryInterface::class, RouteQuery::class);
+        $this->app->bind(TestQueryInterface::class, TestQuery::class);
     }
 }

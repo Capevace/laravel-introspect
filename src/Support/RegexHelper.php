@@ -45,4 +45,31 @@ class RegexHelper
 
         return false;
     }
+
+    /**
+     * Convert a glob pattern to a regex pattern
+     * Supports * (any characters) and ? (single character)
+     */
+    public static function globToRegex(string $pattern): string
+    {
+        $pattern = str($pattern)
+            ->replace('\\', '\\\\')  // Escape backslashes first
+            ->replace('/', '\\/')     // Escape forward slashes (regex delimiter)
+            ->replace('.', '\\.')     // Escape dots
+            ->replace('+', '\\+')    // Escape plus
+            ->replace('(', '\\(')     // Escape parentheses
+            ->replace(')', '\\)')
+            ->replace('[', '\\[')    // Escape brackets
+            ->replace(']', '\\]')
+            ->replace('{', '\\{')    // Escape braces
+            ->replace('}', '\\}')
+            ->replace('^', '\\^')    // Escape caret
+            ->replace('$', '\\$')    // Escape dollar
+            ->replace('|', '\\|')    // Escape pipe
+            ->replace('?', '.')       // Single character wildcard
+            ->replace('*', '.*')      // Multi-character wildcard
+            ->toString();
+
+        return '/^'.$pattern.'$/i';
+    }
 }

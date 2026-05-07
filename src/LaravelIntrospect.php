@@ -9,6 +9,7 @@ use Mateffy\Introspect\Query\Contracts\ModelQueryInterface;
 use Mateffy\Introspect\Query\Contracts\PaginationInterface;
 use Mateffy\Introspect\Query\Contracts\QueryPerformerInterface;
 use Mateffy\Introspect\Query\Contracts\RouteQueryInterface;
+use Mateffy\Introspect\Query\Contracts\TestQueryInterface;
 use Mateffy\Introspect\Query\Contracts\ViewQueryInterface;
 use Mateffy\Introspect\Reflection\ModelReflector;
 use ReflectionException;
@@ -52,5 +53,10 @@ class LaravelIntrospect
     public function routes(): RouteQueryInterface&QueryPerformerInterface&PaginationInterface
     {
         return Container::getInstance()->make(RouteQueryInterface::class, ['path' => $this->path]);
+    }
+
+    public function tests(): TestQueryInterface&QueryPerformerInterface&PaginationInterface
+    {
+        return Container::getInstance()->make(TestQueryInterface::class, ['basePath' => $this->path]);
     }
 }

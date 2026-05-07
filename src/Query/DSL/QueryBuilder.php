@@ -5,6 +5,7 @@ namespace Mateffy\Introspect\Query\DSL;
 use Mateffy\Introspect\Query\Contracts\ClassQueryInterface;
 use Mateffy\Introspect\Query\Contracts\ModelQueryInterface;
 use Mateffy\Introspect\Query\Contracts\RouteQueryInterface;
+use Mateffy\Introspect\Query\Contracts\TestQueryInterface;
 use Mateffy\Introspect\Query\Contracts\ViewQueryInterface;
 
 /**
@@ -48,6 +49,16 @@ class QueryBuilder
     public function applyToModels(ModelQueryInterface $query, array $ast): ModelQueryInterface
     {
         $this->applyNode($query, $ast, 'model');
+
+        return $query;
+    }
+
+    /**
+     * Apply a parsed query to a TestQuery
+     */
+    public function applyToTests(TestQueryInterface $query, array $ast): TestQueryInterface
+    {
+        $this->applyNode($query, $ast, 'test');
 
         return $query;
     }
@@ -136,6 +147,9 @@ class QueryBuilder
                 break;
             case 'model':
                 $this->applyModelCondition($query, $field, $operator, $values, $singleValue);
+                break;
+            case 'test':
+                $this->applyTestCondition($query, $field, $operator, $values, $singleValue);
                 break;
         }
     }
@@ -441,5 +455,56 @@ class QueryBuilder
         ];
 
         return $negations[$operator] ?? $operator;
+    }
+
+    protected function applyTestCondition(TestQueryInterface $query, string $field, string $operator, array $values, ?string $singleValue): void
+    {
+        $field = strtolower($field);
+
+        switch ($field) {
+            case 'file':
+            case 'path':
+                if ($operator === 'equals' || $operator === 'has') {
+                    $query->whereFileMatches($singleValue);
+                } else {
+                    $query->whereFileDoesntMatch($singleValue);
+                }
+                break;
+            case 'description':
+                $this->applyStringOperator($query, $operator, $values, [
+                    'equals' => 'whereDescriptionEquals',
+                    'not_equals' => 'whereDescriptionDoesntEqual',
+                    'starts_with' => 'whereDescriptionStartsWith',
+                    'not_starts_with' => 'whereDescriptionDoesntStartWith',
+                    'ends_with' => 'whereDescriptionEndsWith',
+                    'not_ends_with' => 'whereDescriptionDoesntEndWith',
+                    'contains' => 'whereDescriptionContains',
+                    'not_contains' => 'whereDescriptionDoesntContain',
+                ]);
+                break;
+            case 'status':
+            case 'casestatus':
+                if ($operator === 'equals' || $operator === 'has') {
+                    $query->whereStatusEquals($singleValue);
+                } else {
+                    $query->whereStatusDoesntEqual($singleValue);
+                }
+                break;
+            case 'tag':
+                if ($operator === 'has' || $operator === 'equals') {
+                    $query->whereHasTag($singleValue);
+                } else {
+                    $query->whereDoesntHaveTag($singleValue);
+                }
+                break;
+            case 'reference':
+            case 'reftype':
+                if ($operator === 'has' || $operator === 'equals') {
+                    $query->whereHasReferenceType($singleValue);
+                } else {
+                    $query->whereDoesntHaveReferenceType($singleValue);
+                }
+                break;
+        }
     }
 }
