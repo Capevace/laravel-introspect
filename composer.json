@@ -83,7 +83,7 @@
                 "Mateffy\\Introspect\\LaravelIntrospectServiceProvider"
             ],
             "aliases": {
-                "Introspect": "Introspect"
+                "Introspect": "Mateffy\\Introspect\\Facades\\Introspect"
             }
         }
     },
