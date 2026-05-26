@@ -3,7 +3,9 @@
 namespace Mateffy\Introspect;
 
 use Mateffy\Introspect\Query\ClassQuery;
+use Mateffy\Introspect\Query\CommandQuery;
 use Mateffy\Introspect\Query\Contracts\ClassQueryInterface;
+use Mateffy\Introspect\Query\Contracts\CommandQueryInterface;
 use Mateffy\Introspect\Query\Contracts\ModelQueryInterface;
 use Mateffy\Introspect\Query\Contracts\RouteQueryInterface;
 use Mateffy\Introspect\Query\Contracts\ViewQueryInterface;
@@ -34,5 +36,6 @@ class LaravelIntrospectServiceProvider extends PackageServiceProvider
         $this->app->bind(ClassQueryInterface::class, ClassQuery::class);
         $this->app->bind(ViewQueryInterface::class, ViewQuery::class);
         $this->app->bind(RouteQueryInterface::class, RouteQuery::class);
+        $this->app->bind(CommandQueryInterface::class, CommandQuery::class);
     }
 }

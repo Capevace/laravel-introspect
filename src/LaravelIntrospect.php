@@ -5,6 +5,7 @@ namespace Mateffy\Introspect;
 use Illuminate\Container\Container;
 use Mateffy\Introspect\DTO\Model;
 use Mateffy\Introspect\Query\Contracts\ClassQueryInterface;
+use Mateffy\Introspect\Query\Contracts\CommandQueryInterface;
 use Mateffy\Introspect\Query\Contracts\ModelQueryInterface;
 use Mateffy\Introspect\Query\Contracts\PaginationInterface;
 use Mateffy\Introspect\Query\Contracts\QueryPerformerInterface;
@@ -52,5 +53,10 @@ class LaravelIntrospect
     public function routes(): RouteQueryInterface&QueryPerformerInterface&PaginationInterface
     {
         return Container::getInstance()->make(RouteQueryInterface::class, ['path' => $this->path]);
+    }
+
+    public function commands(): CommandQueryInterface&QueryPerformerInterface&PaginationInterface
+    {
+        return Container::getInstance()->make(CommandQueryInterface::class);
     }
 }
